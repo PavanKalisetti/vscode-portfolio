@@ -1,0 +1,16 @@
+.editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--vscode-editor-bg);
+  overflow: hidden;
+}
+
+.editor-content {
+  flex: 1;
+  padding: 0;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.6;
+} 

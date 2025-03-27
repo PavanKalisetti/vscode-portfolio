@@ -1,0 +1,94 @@
+:root {
+  /* VS Code dark theme colors */
+  --vscode-bg: #1e1e1e;
+  --vscode-sidebar-bg: #252526;
+  --vscode-sidebar-active: #37373d;
+  --vscode-statusbar-bg: #007acc;
+  --vscode-titlebar-bg: #3c3c3c;
+  --vscode-editor-bg: #1e1e1e;
+  --vscode-tab-active-bg: #1e1e1e;
+  --vscode-tab-inactive-bg: #2d2d2d;
+  --vscode-text-color: #d4d4d4;
+  --vscode-text-inactive: #858585;
+  --vscode-selection-bg: #264f78;
+  --vscode-line-number: #858585;
+  --vscode-line-number-active: #c6c6c6;
+  --vscode-activity-bar-bg: #333333;
+  --vscode-panel-bg: #1e1e1e;
+  --vscode-terminal-bg: #1e1e1e;
+  --vscode-border: #474747;
+
+  /* Syntax highlighting */
+  --vscode-yellow: #dcdcaa;
+  --vscode-blue: #569cd6;
+  --vscode-light-blue: #9cdcfe;
+  --vscode-green: #6a9955;
+  --vscode-orange: #ce9178;
+  --vscode-purple: #c586c0;
+  --vscode-red: #f44747;
+  --vscode-light-yellow: #d7ba7d;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Consolas', 'Courier New', monospace;
+}
+
+body {
+  background-color: var(--vscode-bg);
+  color: var(--vscode-text-color);
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+a {
+  color: var(--vscode-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.vs-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vscode-editor-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vscode-sidebar-active);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+} 

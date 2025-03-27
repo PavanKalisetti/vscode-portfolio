@@ -1,0 +1,81 @@
+.explorer {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.section-header {
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--vscode-text-inactive);
+  letter-spacing: 0.5px;
+}
+
+.folder-tree {
+  padding: 0 8px;
+}
+
+.folder {
+  margin-bottom: 4px;
+}
+
+.folder-header {
+  display: flex;
+  align-items: center;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.folder-header:hover {
+  background-color: var(--vscode-sidebar-active);
+}
+
+.folder-icon {
+  display: inline-block;
+  transform: rotate(0deg);
+  transition: transform 0.1s;
+  margin-right: 6px;
+  font-size: 10px;
+  color: var(--vscode-text-inactive);
+}
+
+.folder-icon.expanded {
+  transform: rotate(90deg);
+}
+
+.folder-name {
+  font-size: 13px;
+  color: var(--vscode-text-color);
+}
+
+.folder-content {
+  padding-left: 16px;
+  margin-top: 2px;
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.file:hover {
+  background-color: var(--vscode-sidebar-active);
+}
+
+.file.active {
+  background-color: var(--vscode-sidebar-active);
+}
+
+.file-icon {
+  margin-right: 6px;
+  font-size: 12px;
+}
+
+.file-name {
+  font-size: 13px;
+  color: var(--vscode-text-color);
+} 

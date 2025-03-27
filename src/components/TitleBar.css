@@ -1,0 +1,61 @@
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  background-color: var(--vscode-titlebar-bg);
+  color: var(--vscode-text-inactive);
+  font-size: 12px;
+  padding: 0 10px;
+  -webkit-app-region: drag;
+}
+
+.titlebar-menu {
+  display: flex;
+  align-items: center;
+}
+
+.titlebar-menu-item {
+  padding: 0 8px;
+  cursor: pointer;
+}
+
+.titlebar-menu-item:hover {
+  color: var(--vscode-text-color);
+}
+
+.titlebar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.titlebar-controls {
+  display: flex;
+  -webkit-app-region: no-drag;
+}
+
+.titlebar-button {
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  color: var(--vscode-text-inactive);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.titlebar-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.titlebar-button.close:hover {
+  background-color: #e81123;
+  color: white;
+} 
