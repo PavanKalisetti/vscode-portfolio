@@ -8,34 +8,6 @@ const SkillsSection = () => {
   const highlightRef = useRef(null);
   const containerRef = useRef(null);
 
-  // Skill data for rendering
-  const frontendSkills = [
-    { name: 'React', proficiency: 90 },
-    { name: 'JavaScript', proficiency: 95 },
-    { name: 'HTML5', proficiency: 90 },
-    { name: 'CSS3/SCSS', proficiency: 85 },
-    { name: 'TypeScript', proficiency: 80 },
-    { name: 'Vue.js', proficiency: 75 },
-    { name: 'Redux', proficiency: 85 },
-    { name: 'Next.js', proficiency: 70 }
-  ];
-
-  const backendSkills = [
-    { name: 'Node.js', proficiency: 80 },
-    { name: 'Express', proficiency: 75 },
-    { name: 'MongoDB', proficiency: 70 },
-    { name: 'Firebase', proficiency: 80 },
-    { name: 'REST API', proficiency: 85 }
-  ];
-
-  const otherSkills = [
-    { name: 'Git/GitHub', proficiency: 90 },
-    { name: 'Webpack', proficiency: 75 },
-    { name: 'Docker', proficiency: 65 },
-    { name: 'Figma', proficiency: 80 },
-    { name: 'Adobe XD', proficiency: 70 }
-  ];
-
   // Initial HTML content
   const initialHtml = `<!DOCTYPE html>
 <html>
@@ -52,13 +24,37 @@ const SkillsSection = () => {
       
       <div class="skills-container">
         <h2>Frontend Development</h2>
-        <!-- Frontend skills go here -->
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">React</span>
+            <span class="skill-percentage">90%</span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width:90%"></div>
+          </div>
+        </div>
         
         <h2>Backend Development</h2>
-        <!-- Backend skills go here -->
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">Node.js</span>
+            <span class="skill-percentage">80%</span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width:80%"></div>
+          </div>
+        </div>
         
         <h2>Other Skills</h2>
-        <!-- Other skills go here -->
+        <div class="skill-item">
+          <div class="skill-info">
+            <span class="skill-name">Git/GitHub</span>
+            <span class="skill-percentage">90%</span>
+          </div>
+          <div class="skill-bar">
+            <div class="skill-progress" style="width:90%"></div>
+          </div>
+        </div>
       </div>
       
     </section>
@@ -101,24 +97,6 @@ const SkillsSection = () => {
     // Update line count
     const lines = newText.split('\n').length;
     setLineCount(Math.max(50, lines + 10));
-  };
-
-  // Render skill progress bar
-  const renderSkillBar = (skill) => {
-    return (
-      <div key={skill.name} className="skill-item">
-        <div className="skill-info">
-          <span className="skill-name">{skill.name}</span>
-          <span className="skill-percentage">{skill.proficiency}%</span>
-        </div>
-        <div className="skill-bar">
-          <div 
-            className="skill-progress" 
-            style={{ width: `${skill.proficiency}%` }}
-          ></div>
-        </div>
-      </div>
-    );
   };
 
   // Apply syntax highlighting to HTML
@@ -185,22 +163,6 @@ const SkillsSection = () => {
           <div className="code-editor-highlight" ref={highlightRef}>
             {highlightHtml(htmlText)}
           </div>
-        </div>
-
-        {/* Skills display */}
-        <div className="skills-display">
-          <h2>Frontend Development</h2>
-          {frontendSkills.map(skill => renderSkillBar(skill))}
-        </div>
-        
-        <div className="skills-display">
-          <h2>Backend Development</h2>
-          {backendSkills.map(skill => renderSkillBar(skill))}
-        </div>
-        
-        <div className="skills-display">
-          <h2>Other Skills</h2>
-          {otherSkills.map(skill => renderSkillBar(skill))}
         </div>
       </div>
     </div>

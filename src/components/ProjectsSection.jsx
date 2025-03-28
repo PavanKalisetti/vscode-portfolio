@@ -3,7 +3,6 @@ import './EditorContent.css';
 
 const ProjectsSection = () => {
   const [projectsText, setProjectsText] = useState('');
-  const [displayProjects, setDisplayProjects] = useState([]);
   const [error, setError] = useState(null);
   const [lineCount, setLineCount] = useState(50);
   const editorRef = useRef(null);
@@ -42,7 +41,6 @@ const ProjectsSection = () => {
   useEffect(() => {
     const formattedJson = JSON.stringify({ projects: initialProjects }, null, 2);
     setProjectsText(formattedJson);
-    setDisplayProjects(initialProjects);
     
     // Count lines for the line numbers
     const lines = formattedJson.split('\n').length;
@@ -73,7 +71,6 @@ const ProjectsSection = () => {
     try {
       const parsed = JSON.parse(newText);
       if (parsed && parsed.projects && Array.isArray(parsed.projects)) {
-        setDisplayProjects(parsed.projects);
         setError(null);
       } else {
         setError("Invalid projects format. Expected { projects: [...] }");
@@ -92,8 +89,9 @@ const ProjectsSection = () => {
       const parsed = JSON.parse(projectsText);
       const formatted = JSON.stringify(parsed, null, 2);
       setProjectsText(formatted);
-    } catch (err) {
+    } catch (error) {
       // If it can't be parsed, leave it as is
+      console.log("Could not format JSON:", error);
     }
   };
 
@@ -161,28 +159,6 @@ const ProjectsSection = () => {
             {error}
           </div>
         )}
-
-        <div className="projects-display">
-          {displayProjects.map(project => (
-            <div key={project.id} className="project-card">
-              <div className="project-image">
-                <img src={project.image} alt={project.title} />
-              </div>
-              <div className="project-info">
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-                <div className="project-technologies">
-                  {project.technologies?.map(tech => (
-                    <span key={tech} className="tech-tag">{tech}</span>
-                  ))}
-                </div>
-                <a href={project.link} className="project-link" target="_blank" rel="noopener noreferrer">
-                  View Project
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
