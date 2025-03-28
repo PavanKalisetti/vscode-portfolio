@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
 
 const SkillsSection = () => {
-  const [htmlText, setHtmlText] = useState('');
   const [lineCount, setLineCount] = useState(50);
   const editorRef = useRef(null);
-  const highlightRef = useRef(null);
   const containerRef = useRef(null);
 
   // Initial HTML content
@@ -66,78 +64,45 @@ const SkillsSection = () => {
 
   // Initialize editor with HTML
   useEffect(() => {
-    setHtmlText(initialHtml);
+    if (editorRef.current) {
+      editorRef.current.textContent = initialHtml;
+    }
     
     // Count lines for line numbers
     const lines = initialHtml.split('\n').length;
     setLineCount(Math.max(50, lines + 10));
   }, []);
 
-  // Sync scrolling between textarea and highlight div
-  useEffect(() => {
-    const syncScroll = () => {
-      if (highlightRef.current && editorRef.current) {
-        highlightRef.current.scrollTop = editorRef.current.scrollTop;
-        highlightRef.current.scrollLeft = editorRef.current.scrollLeft;
-      }
-    };
-
-    const textarea = editorRef.current;
-    if (textarea) {
-      textarea.addEventListener('scroll', syncScroll);
-      return () => textarea.removeEventListener('scroll', syncScroll);
-    }
-  }, []);
-
   // Handle text changes
   const handleTextChange = (e) => {
-    const newText = e.target.value;
-    setHtmlText(newText);
+    const newText = e.target.textContent;
     
     // Update line count
     const lines = newText.split('\n').length;
     setLineCount(Math.max(50, lines + 10));
   };
 
-  // Apply syntax highlighting to HTML
-  const highlightHtml = (text) => {
-    if (!text) return null;
-    
-    const lines = text.split('\n');
-    
-    return lines.map((line, index) => {
-      // Tag pattern
-      const tagPattern = /(<\/?[a-zA-Z][a-zA-Z0-9-]*(?:\s+[a-zA-Z][a-zA-Z0-9-]*(?:=(?:"[^"]*"|'[^']*'|[^'">\s]+))?)*\s*\/?>)/g;
+  // Handle key down for tab insertion
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
       
-      // Attribute pattern
-      const attrPattern = /\s+([a-zA-Z][a-zA-Z0-9-]*)(?:=(?:"([^"]*)"|'([^']*)'|([^'">\s]+)))?/g;
+      // Insert a tab at cursor position
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
       
-      // Replace tags
-      let highlightedLine = line.replace(tagPattern, (match) => {
-        // Replace attributes in the tag
-        const highlightedTag = match.replace(attrPattern, (attrMatch, attrName, dqValue, sqValue, uqValue) => {
-          const value = dqValue || sqValue || uqValue || '';
-          const valueHTML = value ? '=' + (dqValue 
-            ? `"<span class="html-string">${dqValue}</span>"` 
-            : (sqValue 
-              ? `'<span class="html-string">${sqValue}</span>'` 
-              : `<span class="html-string">${uqValue}</span>`)) 
-            : '';
-            
-          return ` <span class="html-attr">${attrName}</span>${valueHTML}`;
-        });
-        
-        return `<span class="html-tag">${highlightedTag}</span>`;
-      });
+      const tabNode = document.createTextNode('  ');
+      range.insertNode(tabNode);
       
-      // Add indentation classes
-      const indent = line.match(/^\s*/)[0].length / 2;
-      const indentClass = indent > 0 ? `indent-${Math.min(indent, 5)}` : '';
+      // Move cursor after tab
+      range.setStartAfter(tabNode);
+      range.setEndAfter(tabNode);
+      selection.removeAllRanges();
+      selection.addRange(range);
       
-      return (
-        <div key={index} className={`code-line ${indentClass}`} dangerouslySetInnerHTML={{ __html: highlightedLine }} />
-      );
-    });
+      // Trigger the change event manually
+      handleTextChange({ target: editorRef.current });
+    }
   };
 
   return (
@@ -149,21 +114,15 @@ const SkillsSection = () => {
       </div>
       
       <div className="html-body" ref={containerRef}>
-        <div className="code-editor-container">
-          {/* Invisible textarea for editing */}
-          <textarea
-            ref={editorRef}
-            className="code-editor-textarea"
-            value={htmlText}
-            onChange={handleTextChange}
-            spellCheck="false"
-          />
-          
-          {/* Visual overlay for syntax highlighting */}
-          <div className="code-editor-highlight" ref={highlightRef}>
-            {highlightHtml(htmlText)}
-          </div>
-        </div>
+        <div 
+          ref={editorRef}
+          className="code-editor-single"
+          contentEditable="true"
+          onInput={handleTextChange}
+          onKeyDown={handleKeyDown}
+          spellCheck="false"
+          data-gramm="false"
+        />
       </div>
     </div>
   );

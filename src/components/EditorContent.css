@@ -46,8 +46,6 @@
 /* Interactive Code Editor */
 .code-editor-container {
   position: relative;
-  display: flex;
-  flex: 1;
   width: 100%;
   height: 100%;
   min-height: 300px;
@@ -66,9 +64,9 @@
   border: none;
   resize: none;
   outline: none;
-  padding: 0 20px;
   overflow: auto;
   z-index: 2;
+  margin: 0;
 }
 
 .code-editor-highlight {
@@ -80,6 +78,7 @@
   pointer-events: none;
   overflow: hidden;
   z-index: 1;
+  margin: 0;
 }
 
 /* Code line styling */
@@ -92,6 +91,7 @@
   word-spacing: normal;
   padding: 0 20px;
   min-height: 1.6em;
+  box-sizing: border-box;
 }
 
 /* Fix cursor alignment and ensure identical fonts */
@@ -104,7 +104,7 @@
   letter-spacing: normal;
   word-spacing: normal;
   white-space: pre;
-  padding: 0 20px;
+  padding: 0;
 }
 
 /* Markdown content styling */
@@ -197,7 +197,6 @@
 }
 
 .json-body {
-  padding: 10px 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -227,7 +226,6 @@
 }
 
 .html-body {
-  padding: 10px 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -507,7 +505,7 @@
   letter-spacing: normal;
   word-spacing: normal;
   white-space: pre;
-  padding: 0 20px;
+  padding: 0;
 }
 
 /* Ensure proper cursor positioning by making both layers exactly the same */
@@ -519,4 +517,60 @@
   letter-spacing: normal;
   word-spacing: normal;
   white-space: pre;
+}
+
+/* Code line precise alignment for cursor positioning */
+.code-editor-textarea, 
+.code-editor-highlight .code-line {
+  padding: 0 20px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre;
+  letter-spacing: normal;
+  word-spacing: normal;
+  min-height: 1.6em;
+}
+
+/* Override padding on code-line if it appears in a different context */
+.code-line {
+  padding: 0 20px;
+  min-height: 1.6em;
+}
+
+/* Global box-sizing for consistent measurements */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Single editor component (new approach) */
+.code-editor-single {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  overflow: auto;
+  outline: none;
+  white-space: pre;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--vscode-text-color);
+  tab-size: 2;
+  padding: 0 20px;
+  background-color: transparent;
+  caret-color: var(--vscode-text-color);
+  box-sizing: border-box;
+}
+
+/* Apply specific colors based on content type */
+.html-content .code-editor-single {
+  color: var(--vscode-blue);
+}
+
+.json-content .code-editor-single {
+  color: var(--vscode-light-blue);
+}
+
+.markdown-content .code-editor-single {
+  color: var(--vscode-text-color);
 } 

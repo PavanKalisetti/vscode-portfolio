@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
 
 const ProjectsSection = () => {
-  const [projectsText, setProjectsText] = useState('');
   const [error, setError] = useState(null);
   const [lineCount, setLineCount] = useState(50);
   const editorRef = useRef(null);
-  const highlightRef = useRef(null);
   const containerRef = useRef(null);
 
   // Initial projects data
@@ -40,33 +38,19 @@ const ProjectsSection = () => {
   // Initialize the editor with formatted JSON
   useEffect(() => {
     const formattedJson = JSON.stringify({ projects: initialProjects }, null, 2);
-    setProjectsText(formattedJson);
+    
+    if (editorRef.current) {
+      editorRef.current.textContent = formattedJson;
+    }
     
     // Count lines for the line numbers
     const lines = formattedJson.split('\n').length;
     setLineCount(Math.max(50, lines + 10));
   }, []);
 
-  // Sync scrolling between textarea and highlight div
-  useEffect(() => {
-    const syncScroll = () => {
-      if (highlightRef.current && editorRef.current) {
-        highlightRef.current.scrollTop = editorRef.current.scrollTop;
-        highlightRef.current.scrollLeft = editorRef.current.scrollLeft;
-      }
-    };
-
-    const textarea = editorRef.current;
-    if (textarea) {
-      textarea.addEventListener('scroll', syncScroll);
-      return () => textarea.removeEventListener('scroll', syncScroll);
-    }
-  }, []);
-
-  // Parse JSON when text changes
+  // Handle text changes
   const handleTextChange = (e) => {
-    const newText = e.target.value;
-    setProjectsText(newText);
+    const newText = e.target.textContent;
     
     try {
       const parsed = JSON.parse(newText);
@@ -84,49 +68,40 @@ const ProjectsSection = () => {
     setLineCount(Math.max(50, lines + 10));
   };
 
+  // Format JSON when editor loses focus
   const formatJson = () => {
     try {
-      const parsed = JSON.parse(projectsText);
+      const currentText = editorRef.current.textContent;
+      const parsed = JSON.parse(currentText);
       const formatted = JSON.stringify(parsed, null, 2);
-      setProjectsText(formatted);
+      editorRef.current.textContent = formatted;
     } catch (error) {
       // If it can't be parsed, leave it as is
       console.log("Could not format JSON:", error);
     }
   };
 
-  // Syntax highlighting for the displayed code (not the textarea)
-  const highlightSyntax = (text) => {
-    if (!text) return null;
-    
-    const lines = text.split('\n');
-    
-    return lines.map((line, index) => {
-      // Replace JSON syntax with highlighted spans
-      const keyRegex = /"([^"]+)":/g;
-      const stringRegex = /"([^"]+)"/g;
-      const numberRegex = /:\s*(\d+)(,|\s|$)/g;
+  // Handle key down for tab insertion
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
       
-      let highlightedLine = line
-        .replace(keyRegex, '<span class="json-key">"$1":</span>')
-        .replace(stringRegex, (match, p1, offset) => {
-          // Avoid replacing the key part that we already replaced
-          const prevChar = line[offset - 1];
-          if (prevChar === ':') {
-            return '<span class="json-string">"' + p1 + '"</span>';
-          }
-          return match;
-        })
-        .replace(numberRegex, ': <span class="json-number">$1</span>$2');
-        
-      // Add indentation classes
-      const indent = line.match(/^\s*/)[0].length / 2;
-      const indentClass = indent > 0 ? `indent-${Math.min(indent, 5)}` : '';
+      // Insert a tab at cursor position
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
       
-      return (
-        <div key={index} className={`code-line ${indentClass}`} dangerouslySetInnerHTML={{ __html: highlightedLine }} />
-      );
-    });
+      const tabNode = document.createTextNode('  ');
+      range.insertNode(tabNode);
+      
+      // Move cursor after tab
+      range.setStartAfter(tabNode);
+      range.setEndAfter(tabNode);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      
+      // Trigger the change event manually
+      handleTextChange({ target: editorRef.current });
+    }
   };
 
   return (
@@ -137,22 +112,16 @@ const ProjectsSection = () => {
         ))}
       </div>
       <div className="json-body" ref={containerRef}>
-        <div className="code-editor-container">
-          {/* Invisible textarea for editing */}
-          <textarea
-            ref={editorRef}
-            className="code-editor-textarea"
-            value={projectsText}
-            onChange={handleTextChange}
-            onBlur={formatJson}
-            spellCheck="false"
-          />
-          
-          {/* Visual overlay for syntax highlighting */}
-          <div className="code-editor-highlight" ref={highlightRef}>
-            {highlightSyntax(projectsText)}
-          </div>
-        </div>
+        <div 
+          ref={editorRef}
+          className="code-editor-single"
+          contentEditable="true"
+          onInput={handleTextChange}
+          onBlur={formatJson}
+          onKeyDown={handleKeyDown}
+          spellCheck="false"
+          data-gramm="false"
+        />
         
         {error && (
           <div className="json-error">
