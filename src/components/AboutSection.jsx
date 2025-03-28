@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
 
 const AboutSection = () => {
-  const [markdownText, setMarkdownText] = useState('');
   const [lineCount, setLineCount] = useState(40);
   const editorRef = useRef(null);
-  const highlightRef = useRef(null);
   const containerRef = useRef(null);
 
   // Initial markdown content
@@ -48,102 +46,45 @@ University of Technology
 
   // Initialize editor with markdown
   useEffect(() => {
-    setMarkdownText(initialMarkdown);
+    if (editorRef.current) {
+      editorRef.current.textContent = initialMarkdown;
+    }
     
     // Count lines for line numbers
     const lines = initialMarkdown.split('\n').length;
     setLineCount(Math.max(40, lines + 10));
   }, []);
 
-  // Sync scrolling between textarea and highlight div
-  useEffect(() => {
-    const syncScroll = () => {
-      if (highlightRef.current && editorRef.current) {
-        highlightRef.current.scrollTop = editorRef.current.scrollTop;
-        highlightRef.current.scrollLeft = editorRef.current.scrollLeft;
-      }
-    };
-
-    const textarea = editorRef.current;
-    if (textarea) {
-      textarea.addEventListener('scroll', syncScroll);
-      return () => textarea.removeEventListener('scroll', syncScroll);
-    }
-  }, []);
-
   // Handle text changes
   const handleTextChange = (e) => {
-    const newText = e.target.value;
-    setMarkdownText(newText);
+    const newText = e.target.textContent;
     
     // Update line count
     const lines = newText.split('\n').length;
     setLineCount(Math.max(40, lines + 10));
   };
 
-  // Apply syntax highlighting to markdown
-  const highlightMarkdown = (text) => {
-    if (!text) return null;
-    
-    const lines = text.split('\n');
-    
-    return lines.map((line, index) => {
-      // Check for different markdown elements
+  // Handle key down for tab insertion
+  const handleKeyDown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
       
-      // Headers
-      if (line.match(/^# .+/)) {
-        return <div key={index} className="code-line"><span className="markdown-heading">{line}</span></div>;
-      }
+      // Insert a tab at cursor position
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
       
-      if (line.match(/^## .+/)) {
-        return <div key={index} className="code-line"><span className="markdown-heading">{line}</span></div>;
-      }
+      const tabNode = document.createTextNode('  ');
+      range.insertNode(tabNode);
       
-      if (line.match(/^### .+/)) {
-        return <div key={index} className="code-line"><span className="markdown-subheading">{line}</span></div>;
-      }
+      // Move cursor after tab
+      range.setStartAfter(tabNode);
+      range.setEndAfter(tabNode);
+      selection.removeAllRanges();
+      selection.addRange(range);
       
-      // Italic text
-      if (line.match(/^\*.+\*$/)) {
-        return <div key={index} className="code-line"><span className="markdown-italic">{line}</span></div>;
-      }
-      
-      // List items
-      if (line.match(/^- .+/)) {
-        // Check for bold text within list items
-        const boldPattern = /\*\*([^*]+)\*\*/g;
-        const parts = [];
-        let lastIndex = 0;
-        let match;
-        
-        const lineCopy = line;
-        let formattedLine = line;
-        
-        while ((match = boldPattern.exec(lineCopy)) !== null) {
-          const start = match.index;
-          const end = start + match[0].length;
-          
-          formattedLine = 
-            formattedLine.substring(0, start) + 
-            `<span class="markdown-bold">${match[1]}</span>` + 
-            formattedLine.substring(end);
-        }
-        
-        return (
-          <div key={index} className="code-line">
-            <span className="markdown-list" dangerouslySetInnerHTML={{ __html: formattedLine }}></span>
-          </div>
-        );
-      }
-      
-      // Empty line
-      if (line.trim() === '') {
-        return <div key={index} className="code-line"></div>;
-      }
-      
-      // Default text
-      return <div key={index} className="code-line"><span className="markdown-text">{line}</span></div>;
-    });
+      // Trigger the change event manually
+      handleTextChange({ target: editorRef.current });
+    }
   };
 
   return (
@@ -155,21 +96,15 @@ University of Technology
       </div>
       
       <div className="markdown-body code-editor" ref={containerRef}>
-        <div className="code-editor-container">
-          {/* Invisible textarea for editing */}
-          <textarea
-            ref={editorRef}
-            className="code-editor-textarea"
-            value={markdownText}
-            onChange={handleTextChange}
-            spellCheck="false"
-          />
-          
-          {/* Visual overlay for syntax highlighting */}
-          <div className="code-editor-highlight" ref={highlightRef}>
-            {highlightMarkdown(markdownText)}
-          </div>
-        </div>
+        <div 
+          ref={editorRef}
+          className="code-editor-single"
+          contentEditable="true"
+          onInput={handleTextChange}
+          onKeyDown={handleKeyDown}
+          spellCheck="false"
+          data-gramm="false"
+        />
       </div>
     </div>
   );
