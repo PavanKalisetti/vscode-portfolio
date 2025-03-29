@@ -10,7 +10,7 @@
   -webkit-app-region: drag;
   position: relative;
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .titlebar-menu {
@@ -26,15 +26,13 @@
 }
 
 .titlebar-menu-item {
-  padding: 0 10px;
+  padding: 0 12px;
   cursor: pointer;
   display: flex;
   align-items: center;
   height: 100%;
   font-weight: 500;
-  transition: background-color 0.2s, color 0.2s;
-  border-radius: 3px;
-  margin: 0 2px;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .titlebar-menu-item:hover {
@@ -54,20 +52,20 @@
   min-width: 180px;
   background-color: var(--vscode-dropdown-background);
   border: 1px solid var(--vscode-border);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
   z-index: 1001;
   border-radius: 4px;
   overflow: hidden;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .dropdown-menu-item {
   display: flex;
-  justify-content: space-between;
-  padding: 8px 14px;
+  align-items: center;
+  padding: 8px 16px;
   cursor: pointer;
   position: relative;
-  transition: background-color 0.15s;
+  transition: background-color 0.15s ease;
 }
 
 .dropdown-menu-item:hover {
@@ -76,6 +74,7 @@
 
 .dropdown-menu-label {
   flex: 1;
+  white-space: nowrap;
 }
 
 .dropdown-menu-shortcut {
@@ -92,16 +91,17 @@
 .dropdown-menu-arrow {
   font-size: 10px;
   color: var(--vscode-text-inactive);
+  margin-left: 8px;
 }
 
 .submenu {
   position: absolute;
   top: 0;
   left: 100%;
-  min-width: 180px;
+  min-width: 160px;
   background-color: var(--vscode-dropdown-background);
   border: 1px solid var(--vscode-border);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
   display: none;
   z-index: 1002;
   border-radius: 4px;
@@ -125,7 +125,7 @@
   text-overflow: ellipsis;
   -webkit-app-region: drag;
   font-weight: 500;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
 }
 
 .titlebar-controls {
@@ -134,7 +134,7 @@
 }
 
 .titlebar-button {
-  width: 36px;
+  width: 46px;
   height: 36px;
   background: transparent;
   border: none;
@@ -144,9 +144,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-  border-radius: 3px;
-  margin-left: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .titlebar-button:hover {

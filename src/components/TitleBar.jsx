@@ -28,16 +28,17 @@ const TitleBar = ({ onMenuAction }) => {
       { label: 'Download Resume', action: 'DOWNLOAD_RESUME' },
     ],
     View: [
+      { label: 'Command Palette...', action: 'COMMAND_PALETTE' },
       { label: 'Explorer', action: 'VIEW_EXPLORER' },
       { label: 'Search', action: 'VIEW_SEARCH' },
-      { label: 'GitHub', action: 'VIEW_GIT' },
-      { 
-        label: 'Appearance', 
-        submenu: [
-          { label: 'Dark Theme', action: 'CHANGE_THEME', payload: 'dark' },
-          { label: 'Light Theme', action: 'CHANGE_THEME', payload: 'light' }
-        ] 
-      }
+      { label: 'GitHub', action: 'VIEW_GIT' }
+      // { 
+      //   label: 'Appearance', 
+      //   submenu: [
+      //     { label: 'Dark Theme', action: 'CHANGE_THEME', payload: 'dark' },
+      //     { label: 'Light Theme', action: 'CHANGE_THEME', payload: 'light' }
+      //   ] 
+      // }
     ],
     Connect: [
       { label: 'LinkedIn', action: 'OPEN_LINKEDIN' },
@@ -143,7 +144,7 @@ const TitleBar = ({ onMenuAction }) => {
           </div>
         ))}
       </div>
-      <div className="titlebar-title">Developer Portfolio - VS Code Theme</div>
+      <div className="titlebar-title">Developer Portfolio — VS Code Edition</div>
       <div className="titlebar-controls">
         <button 
           className="titlebar-button minimize" 

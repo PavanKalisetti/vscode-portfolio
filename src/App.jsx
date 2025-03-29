@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar'
 import Editor from './components/Editor'
 import StatusBar from './components/StatusBar'
 import AboutModal from './components/AboutModal'
+import CommandPalette from './components/CommandPalette'
 import './VSCodeTheme.css'
 import './App.css'
 
@@ -13,6 +14,7 @@ function App() {
   const [activeFile, setActiveFile] = useState('README.md')
   const [theme, setTheme] = useState('dark') // 'dark' or 'light'
   const [showAboutModal, setShowAboutModal] = useState(false)
+  const [showCommandPalette, setShowCommandPalette] = useState(false)
   
   const handleMenuAction = (action, payload) => {
     switch (action) {
@@ -28,6 +30,9 @@ function App() {
         break
       case 'VIEW_DEBUG':
         setActiveIcon('debug')
+        break
+      case 'COMMAND_PALETTE':
+        setShowCommandPalette(true)
         break
         
       // Theme actions  
@@ -95,6 +100,28 @@ function App() {
     }
   }
 
+  // Define commands for the command palette
+  const commands = [
+    { id: 'about', label: 'About Me', action: () => setActiveFile('README.md') },
+    { id: 'projects', label: 'Projects', action: () => setActiveFile('projects.json') },
+    { id: 'skills', label: 'Skills', action: () => setActiveFile('skills.html') },
+    { id: 'contact', label: 'Contact', action: () => setActiveFile('contact.md') },
+    { id: 'theme-dark', label: 'Switch to Dark Theme', action: () => {
+      setTheme('dark')
+      document.documentElement.setAttribute('data-theme', 'dark')
+    }},
+    { id: 'theme-light', label: 'Switch to Light Theme', action: () => {
+      setTheme('light')
+      document.documentElement.setAttribute('data-theme', 'light')
+    }},
+    { id: 'linkedin', label: 'Open LinkedIn Profile', action: () => window.open('https://www.linkedin.com/', '_blank') },
+    { id: 'github', label: 'Open GitHub Profile', action: () => window.open('https://github.com/', '_blank') },
+    { id: 'twitter', label: 'Open Twitter Profile', action: () => window.open('https://twitter.com/', '_blank') },
+    { id: 'email', label: 'Send Email', action: () => window.location.href = 'mailto:your.email@example.com' },
+    { id: 'about-site', label: 'About This Site', action: () => setShowAboutModal(true) },
+    { id: 'source-code', label: 'View Source Code', action: () => window.open('https://github.com/yourusername/portfolio-vscode', '_blank') },
+  ]
+
   return (
     <div className={`vs-container theme-${theme}`}>
       <TitleBar onMenuAction={handleMenuAction} />
@@ -107,6 +134,17 @@ function App() {
       
       {showAboutModal && (
         <AboutModal onClose={() => setShowAboutModal(false)} />
+      )}
+      
+      {showCommandPalette && (
+        <CommandPalette 
+          commands={commands} 
+          onClose={() => setShowCommandPalette(false)}
+          onSelect={(command) => {
+            command.action()
+            setShowCommandPalette(false)
+          }}
+        />
       )}
     </div>
   )
