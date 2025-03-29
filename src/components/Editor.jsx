@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Tabs from './Tabs';
 import AboutSection from './AboutSection';
 import ProjectsSection from './ProjectsSection';
@@ -6,9 +6,7 @@ import SkillsSection from './SkillsSection';
 import ContactSection from './ContactSection';
 import './Editor.css';
 
-const Editor = () => {
-  const [activeTab, setActiveTab] = useState('README.md');
-  
+const Editor = ({ activeFile, setActiveFile }) => {
   const tabs = [
     { id: 'README.md', label: 'README.md', type: 'about' },
     { id: 'projects.json', label: 'projects.json', type: 'projects' },
@@ -17,7 +15,7 @@ const Editor = () => {
   ];
 
   const renderContent = () => {
-    const currentTab = tabs.find(tab => tab.id === activeTab);
+    const currentTab = tabs.find(tab => tab.id === activeFile);
     
     switch (currentTab?.type) {
       case 'about':
@@ -35,7 +33,7 @@ const Editor = () => {
 
   return (
     <div className="editor-container">
-      <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Tabs tabs={tabs} activeTab={activeFile} setActiveTab={setActiveFile} />
       <div className="editor-content">
         {renderContent()}
       </div>

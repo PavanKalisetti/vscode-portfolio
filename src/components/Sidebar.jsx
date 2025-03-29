@@ -2,11 +2,11 @@ import React from 'react';
 import Explorer from './Explorer';
 import './Sidebar.css';
 
-const Sidebar = ({ activeIcon }) => {
+const Sidebar = ({ activeIcon, activeFile, setActiveFile }) => {
   const renderContent = () => {
     switch (activeIcon) {
       case 'explorer':
-        return <Explorer />;
+        return <Explorer activeFile={activeFile} setActiveFile={setActiveFile} />;
       case 'search':
         return <div className="sidebar-section">Search</div>;
       case 'git':
@@ -20,7 +20,7 @@ const Sidebar = ({ activeIcon }) => {
       case 'settings':
         return <div className="sidebar-section">Settings</div>;
       default:
-        return <Explorer />;
+        return <Explorer activeFile={activeFile} setActiveFile={setActiveFile} />;
     }
   };
 

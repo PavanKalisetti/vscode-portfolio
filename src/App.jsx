@@ -9,14 +9,15 @@ import './App.css'
 
 function App() {
   const [activeIcon, setActiveIcon] = useState('explorer')
+  const [activeFile, setActiveFile] = useState('README.md')
 
   return (
     <div className="vs-container">
       <TitleBar />
       <div className="vs-main">
         <ActivityBar activeIcon={activeIcon} setActiveIcon={setActiveIcon} />
-        <Sidebar activeIcon={activeIcon} />
-        <Editor />
+        <Sidebar activeIcon={activeIcon} activeFile={activeFile} setActiveFile={setActiveFile} />
+        <Editor activeFile={activeFile} setActiveFile={setActiveFile} />
       </div>
       <StatusBar />
     </div>

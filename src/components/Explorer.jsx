@@ -1,112 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Explorer.css';
 
-const Explorer = () => {
-  const [expandedFolders, setExpandedFolders] = useState({
-    'portfolio': true,
-    'projects': false,
-    'skills': false,
-    'contact': false
-  });
+const Explorer = ({ activeFile, setActiveFile }) => {
+  // List of files directly available in the editor
+  const files = [
+    { id: 'README.md', name: 'README.md', icon: '📄', type: 'markdown' },
+    { id: 'projects.json', name: 'projects.json', icon: '📄', type: 'json' },
+    { id: 'skills.html', name: 'skills.html', icon: '📄', type: 'html' },
+    { id: 'contact.md', name: 'contact.md', icon: '📄', type: 'markdown' }
+  ];
 
-  const toggleFolder = (folder) => {
-    setExpandedFolders({
-      ...expandedFolders,
-      [folder]: !expandedFolders[folder]
-    });
+  const handleFileClick = (fileId) => {
+    setActiveFile(fileId);
+    // You could add logic here to communicate with the Editor component
+    // to open the selected file
+  };
+
+  // Function to get file icon based on file type
+  const getFileIcon = (fileType) => {
+    switch (fileType) {
+      case 'markdown':
+        return <span className="file-icon">📝</span>;
+      case 'json':
+        return <span className="file-icon">🔢</span>;
+      case 'html':
+        return <span className="file-icon">🌐</span>;
+      default:
+        return <span className="file-icon">📄</span>;
+    }
   };
 
   return (
     <div className="explorer">
-      <div className="folder-section">
-        <div className="section-header">
-          <span>PORTFOLIO</span>
-        </div>
-        <div className="folder-tree">
-          <div className="folder">
-            <div className="folder-header" onClick={() => toggleFolder('portfolio')}>
-              <span className={`folder-icon ${expandedFolders['portfolio'] ? 'expanded' : ''}`}>▶</span>
-              <span className="folder-name">Portfolio</span>
-            </div>
-            {expandedFolders['portfolio'] && (
-              <div className="folder-content">
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">about.md</span>
-                </div>
-                <div className="file active">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">README.md</span>
-                </div>
-              </div>
-            )}
+      <div className="section-header">
+        <span>PORTFOLIO</span>
+      </div>
+      <div className="file-list">
+        {files.map((file) => (
+          <div 
+            key={file.id}
+            className={`file ${activeFile === file.id ? 'active' : ''}`}
+            onClick={() => handleFileClick(file.id)}
+          >
+            {getFileIcon(file.type)}
+            <span className="file-name">{file.name}</span>
           </div>
-          
-          <div className="folder">
-            <div className="folder-header" onClick={() => toggleFolder('projects')}>
-              <span className={`folder-icon ${expandedFolders['projects'] ? 'expanded' : ''}`}>▶</span>
-              <span className="folder-name">Projects</span>
-            </div>
-            {expandedFolders['projects'] && (
-              <div className="folder-content">
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">project1.json</span>
-                </div>
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">project2.json</span>
-                </div>
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">project3.json</span>
-                </div>
-              </div>
-            )}
-          </div>
-          
-          <div className="folder">
-            <div className="folder-header" onClick={() => toggleFolder('skills')}>
-              <span className={`folder-icon ${expandedFolders['skills'] ? 'expanded' : ''}`}>▶</span>
-              <span className="folder-name">Skills</span>
-            </div>
-            {expandedFolders['skills'] && (
-              <div className="folder-content">
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">frontend.html</span>
-                </div>
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">backend.html</span>
-                </div>
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">others.html</span>
-                </div>
-              </div>
-            )}
-          </div>
-          
-          <div className="folder">
-            <div className="folder-header" onClick={() => toggleFolder('contact')}>
-              <span className={`folder-icon ${expandedFolders['contact'] ? 'expanded' : ''}`}>▶</span>
-              <span className="folder-name">Contact</span>
-            </div>
-            {expandedFolders['contact'] && (
-              <div className="folder-content">
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">contact.md</span>
-                </div>
-                <div className="file">
-                  <span className="file-icon">📄</span>
-                  <span className="file-name">social.json</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
