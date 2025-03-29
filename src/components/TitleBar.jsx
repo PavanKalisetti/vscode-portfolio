@@ -144,7 +144,7 @@ const TitleBar = ({ onMenuAction }) => {
           </div>
         ))}
       </div>
-      <div className="titlebar-title">VS Code Edition</div>
+      <div className="titlebar-title">Pavan Kalisetti - VS Code Portfolio</div>
       <div className="titlebar-controls">
         <button 
           className="titlebar-button minimize" 
