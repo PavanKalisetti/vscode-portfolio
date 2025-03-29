@@ -1,0 +1,189 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  background-color: var(--vscode-editor-bg);
+  border-radius: 6px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+  width: 550px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--vscode-border);
+}
+
+.modal-header {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--vscode-border);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--vscode-text-color);
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--vscode-text-inactive);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+.modal-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--vscode-text-color);
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.about-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--vscode-statusbar-bg);
+  margin-bottom: 16px;
+}
+
+.code-tag {
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+}
+
+.modal-body h3 {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--vscode-text-color);
+}
+
+.version {
+  color: var(--vscode-text-inactive);
+  margin: 0 0 24px 0;
+  font-size: 14px;
+}
+
+.about-description {
+  text-align: left;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.about-description p {
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+  color: var(--vscode-text-color);
+}
+
+.about-description ul {
+  margin: 0 0 16px 0;
+  padding-left: 24px;
+}
+
+.about-description li {
+  margin: 8px 0;
+  color: var(--vscode-text-color);
+}
+
+.tech-stack {
+  margin: 16px 0;
+  width: 100%;
+}
+
+.tech-stack h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--vscode-text-color);
+}
+
+.tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tech-badge {
+  background-color: var(--vscode-statusbar-bg);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.about-footer {
+  margin-top: 16px;
+  width: 100%;
+  text-align: center;
+  color: var(--vscode-text-inactive);
+  font-size: 13px;
+}
+
+.about-footer p {
+  margin: 4px 0;
+}
+
+.modal-footer {
+  padding: 16px 20px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--vscode-border);
+  gap: 10px;
+}
+
+.modal-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: var(--vscode-sidebar-active);
+  color: var(--vscode-text-color);
+  border: 1px solid var(--vscode-border);
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.modal-button:hover {
+  background-color: var(--vscode-list-hoverBackground);
+}
+
+.modal-button.primary {
+  background-color: var(--vscode-statusbar-bg);
+  color: white;
+  border: none;
+}
+
+.modal-button.primary:hover {
+  background-color: #0066b8;
+} 

@@ -17,6 +17,8 @@
   --vscode-panel-bg: #1e1e1e;
   --vscode-terminal-bg: #1e1e1e;
   --vscode-border: #474747;
+  --vscode-dropdown-background: #3c3c3c;
+  --vscode-list-hoverBackground: #2a2d2e;
 
   /* Syntax highlighting */
   --vscode-yellow: #dcdcaa;
@@ -27,6 +29,39 @@
   --vscode-purple: #c586c0;
   --vscode-red: #f44747;
   --vscode-light-yellow: #d7ba7d;
+}
+
+/* VS Code light theme colors */
+:root[data-theme="light"] {
+  --vscode-bg: #ffffff;
+  --vscode-sidebar-bg: #f3f3f3;
+  --vscode-sidebar-active: #e8e8e8;
+  --vscode-statusbar-bg: #007acc;
+  --vscode-titlebar-bg: #dddddd;
+  --vscode-editor-bg: #ffffff;
+  --vscode-tab-active-bg: #ffffff;
+  --vscode-tab-inactive-bg: #ececec;
+  --vscode-text-color: #333333;
+  --vscode-text-inactive: #616161;
+  --vscode-selection-bg: #add6ff;
+  --vscode-line-number: #909090;
+  --vscode-line-number-active: #333333;
+  --vscode-activity-bar-bg: #2c2c2c;
+  --vscode-panel-bg: #ffffff;
+  --vscode-terminal-bg: #ffffff;
+  --vscode-border: #cecece;
+  --vscode-dropdown-background: #f8f8f8;
+  --vscode-list-hoverBackground: #e8e8e8;
+
+  /* Syntax highlighting for light theme */
+  --vscode-yellow: #795e26;
+  --vscode-blue: #0000ff;
+  --vscode-light-blue: #001080;
+  --vscode-green: #008000;
+  --vscode-orange: #a31515;
+  --vscode-purple: #af00db;
+  --vscode-red: #e51400;
+  --vscode-light-yellow: #795e26;
 }
 
 * {
@@ -72,6 +107,51 @@ code {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+/* Theme classes */
+.theme-dark {
+  --vscode-bg: #1e1e1e;
+  --vscode-sidebar-bg: #252526;
+  --vscode-sidebar-active: #37373d;
+  --vscode-statusbar-bg: #007acc;
+  --vscode-titlebar-bg: #3c3c3c;
+  --vscode-editor-bg: #1e1e1e;
+  --vscode-tab-active-bg: #1e1e1e;
+  --vscode-tab-inactive-bg: #2d2d2d;
+  --vscode-text-color: #d4d4d4;
+  --vscode-text-inactive: #858585;
+  --vscode-selection-bg: #264f78;
+  --vscode-line-number: #858585;
+  --vscode-line-number-active: #c6c6c6;
+  --vscode-activity-bar-bg: #333333;
+  --vscode-panel-bg: #1e1e1e;
+  --vscode-terminal-bg: #1e1e1e;
+  --vscode-border: #474747;
+  --vscode-dropdown-background: #3c3c3c;
+  --vscode-list-hoverBackground: #2a2d2e;
+}
+
+.theme-light {
+  --vscode-bg: #ffffff;
+  --vscode-sidebar-bg: #f3f3f3;
+  --vscode-sidebar-active: #e8e8e8;
+  --vscode-statusbar-bg: #007acc;
+  --vscode-titlebar-bg: #dddddd;
+  --vscode-editor-bg: #ffffff;
+  --vscode-tab-active-bg: #ffffff;
+  --vscode-tab-inactive-bg: #ececec;
+  --vscode-text-color: #333333;
+  --vscode-text-inactive: #616161;
+  --vscode-selection-bg: #add6ff;
+  --vscode-line-number: #909090;
+  --vscode-line-number-active: #333333;
+  --vscode-activity-bar-bg: #2c2c2c;
+  --vscode-panel-bg: #ffffff;
+  --vscode-terminal-bg: #ffffff;
+  --vscode-border: #cecece;
+  --vscode-dropdown-background: #f8f8f8;
+  --vscode-list-hoverBackground: #e8e8e8;
 }
 
 /* Scrollbar styles */

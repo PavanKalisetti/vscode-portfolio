@@ -2,26 +2,118 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 30px;
+  height: 36px;
   background-color: var(--vscode-titlebar-bg);
   color: var(--vscode-text-inactive);
-  font-size: 12px;
-  padding: 0 10px;
+  font-size: 13px;
+  padding: 0 12px;
   -webkit-app-region: drag;
+  position: relative;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .titlebar-menu {
   display: flex;
   align-items: center;
+  height: 100%;
+  -webkit-app-region: no-drag;
+}
+
+.menu-container {
+  position: relative;
+  height: 100%;
 }
 
 .titlebar-menu-item {
-  padding: 0 8px;
+  padding: 0 10px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s;
+  border-radius: 3px;
+  margin: 0 2px;
 }
 
 .titlebar-menu-item:hover {
   color: var(--vscode-text-color);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.titlebar-menu-item.active {
+  color: var(--vscode-text-color);
+  background-color: var(--vscode-dropdown-background);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background-color: var(--vscode-dropdown-background);
+  border: 1px solid var(--vscode-border);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.dropdown-menu-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 14px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.15s;
+}
+
+.dropdown-menu-item:hover {
+  background-color: var(--vscode-list-hoverBackground);
+}
+
+.dropdown-menu-label {
+  flex: 1;
+}
+
+.dropdown-menu-shortcut {
+  color: var(--vscode-text-inactive);
+  margin-left: 20px;
+  font-size: 10px;
+}
+
+/* Submenu styling */
+.dropdown-menu-item.has-submenu {
+  position: relative;
+}
+
+.dropdown-menu-arrow {
+  font-size: 10px;
+  color: var(--vscode-text-inactive);
+}
+
+.submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  min-width: 180px;
+  background-color: var(--vscode-dropdown-background);
+  border: 1px solid var(--vscode-border);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 1002;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dropdown-menu-item.has-submenu:hover .submenu {
+  display: block;
+}
+
+.submenu .dropdown-menu-item {
+  white-space: nowrap;
 }
 
 .titlebar-title {
@@ -31,6 +123,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  -webkit-app-region: drag;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .titlebar-controls {
@@ -39,8 +134,8 @@
 }
 
 .titlebar-button {
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   background: transparent;
   border: none;
   color: var(--vscode-text-inactive);
@@ -49,6 +144,9 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  border-radius: 3px;
+  margin-left: 4px;
 }
 
 .titlebar-button:hover {
