@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
+import '../utils/prism-vscode-theme.css';
+import { applySyntaxHighlighting, createSyntaxHighlightingObserver, handleEnterKey } from '../utils/SyntaxHighlighter';
 
 const ProjectsSection = () => {
   const [error, setError] = useState(null);
   const [lineCount, setLineCount] = useState(50);
   const editorRef = useRef(null);
   const containerRef = useRef(null);
+  const observerRef = useRef(null);
 
   // Initial projects data
   const initialProjects = [
@@ -41,11 +44,29 @@ const ProjectsSection = () => {
     
     if (editorRef.current) {
       editorRef.current.textContent = formattedJson;
+      
+      // Initial syntax highlighting
+      applySyntaxHighlighting(editorRef.current, 'json');
+      
+      // Setup observer for real-time highlighting
+      observerRef.current = createSyntaxHighlightingObserver(editorRef.current, 'json');
+      observerRef.current.observe(editorRef.current, {
+        characterData: true,
+        childList: true,
+        subtree: true
+      });
     }
     
     // Count lines for the line numbers
     const lines = formattedJson.split('\n').length;
     setLineCount(Math.max(50, lines + 10));
+    
+    // Cleanup observer on unmount
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
   }, []);
 
   // Handle text changes
@@ -68,6 +89,14 @@ const ProjectsSection = () => {
     setLineCount(Math.max(50, lines + 10));
   };
 
+  // Called after keydown to ensure cursor position is maintained
+  const handleKeyUp = (e) => {
+    // For certain keys, we may need to manually maintain cursor position
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      // Let the observer handle it via debounce
+    }
+  };
+
   // Format JSON when editor loses focus
   const formatJson = () => {
     try {
@@ -75,14 +104,23 @@ const ProjectsSection = () => {
       const parsed = JSON.parse(currentText);
       const formatted = JSON.stringify(parsed, null, 2);
       editorRef.current.textContent = formatted;
+      
+      // Re-apply highlighting after formatting
+      applySyntaxHighlighting(editorRef.current, 'json');
     } catch (error) {
       // If it can't be parsed, leave it as is
       console.log("Could not format JSON:", error);
     }
   };
 
-  // Handle key down for tab insertion
+  // Handle key down for special key processing
   const handleKeyDown = (e) => {
+    // Handle Enter key for line breaks
+    if (handleEnterKey(e, editorRef, handleTextChange)) {
+      return;
+    }
+    
+    // Handle Tab key for indentation
     if (e.key === 'Tab') {
       e.preventDefault();
       
@@ -114,13 +152,15 @@ const ProjectsSection = () => {
       <div className="json-body" ref={containerRef}>
         <div 
           ref={editorRef}
-          className="code-editor-single"
+          className="code-editor-single language-json"
           contentEditable="true"
           onInput={handleTextChange}
-          onBlur={formatJson}
           onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
+          onBlur={formatJson}
           spellCheck="false"
           data-gramm="false"
+          data-language="json"
         />
         
         {error && (

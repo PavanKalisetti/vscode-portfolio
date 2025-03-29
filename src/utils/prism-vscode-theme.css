@@ -1,0 +1,156 @@
+/**
+ * VS Code Dark+ Theme for PrismJS
+ * Designed to match VS Code's default dark theme
+ */
+
+/* PrismJS base styles */
+code[class*="language-"],
+pre[class*="language-"],
+.code-editor-single {
+  color: var(--vscode-text-color, #d4d4d4);
+  background: none;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 14px;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.6;
+  tab-size: 2;
+  hyphens: none;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+}
+
+/* Tokens */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--vscode-comment-color, #6a9955);
+}
+
+.token.punctuation {
+  color: var(--vscode-punctuation-color, #d4d4d4);
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: var(--vscode-number-color, #b5cea8);
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: var(--vscode-string-color, #ce9178);
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: var(--vscode-operator-color, #d4d4d4);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: var(--vscode-keyword-color, #569cd6);
+}
+
+.token.function,
+.token.class-name {
+  color: var(--vscode-function-color, #dcdcaa);
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: var(--vscode-variable-color, #9cdcfe);
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+/* Markdown specific */
+.language-markdown .token.title,
+.language-markdown .token.title .token.punctuation {
+  color: var(--vscode-heading-color, #569cd6);
+  font-weight: bold;
+}
+
+.language-markdown .token.blockquote.punctuation {
+  color: var(--vscode-blockquote-color, #608b4e);
+}
+
+.language-markdown .token.code {
+  color: var(--vscode-code-color, #ce9178);
+}
+
+.language-markdown .token.hr.punctuation {
+  color: var(--vscode-hr-color, #6796e6);
+}
+
+.language-markdown .token.url > .token.content {
+  color: var(--vscode-link-color, #3794ff);
+}
+
+.language-markdown .token.url-link {
+  color: var(--vscode-link-url-color, #9cdcfe);
+}
+
+.language-markdown .token.list.punctuation {
+  color: var(--vscode-list-punctuation-color, #6796e6);
+}
+
+.language-markdown .token.table-header {
+  color: var(--vscode-table-header-color, #569cd6);
+}
+
+/* JSON specific */
+.language-json .token.property {
+  color: var(--vscode-json-property-color, #9cdcfe);
+}
+
+/* HTML specific */
+.language-html .token.tag {
+  color: var(--vscode-html-tag-color, #569cd6);
+}
+
+.language-html .token.attr-name {
+  color: var(--vscode-html-attribute-color, #9cdcfe);
+}
+
+.language-html .token.attr-value {
+  color: var(--vscode-html-string-color, #ce9178);
+}
+
+/* Ensure cursor color is visible on all highlighted elements */
+.code-editor-single {
+  caret-color: var(--vscode-text-color, #d4d4d4);
+} 

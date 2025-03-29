@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
+import '../utils/prism-vscode-theme.css';
+import { applySyntaxHighlighting, createSyntaxHighlightingObserver, handleEnterKey } from '../utils/SyntaxHighlighter';
 
 const SkillsSection = () => {
   const [lineCount, setLineCount] = useState(50);
   const editorRef = useRef(null);
   const containerRef = useRef(null);
+  const observerRef = useRef(null);
 
   // Initial HTML content
   const initialHtml = `<!DOCTYPE html>
@@ -66,11 +69,29 @@ const SkillsSection = () => {
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.textContent = initialHtml;
+      
+      // Initial syntax highlighting
+      applySyntaxHighlighting(editorRef.current, 'html');
+      
+      // Setup observer for real-time highlighting
+      observerRef.current = createSyntaxHighlightingObserver(editorRef.current, 'html');
+      observerRef.current.observe(editorRef.current, {
+        characterData: true,
+        childList: true,
+        subtree: true
+      });
     }
     
     // Count lines for line numbers
     const lines = initialHtml.split('\n').length;
     setLineCount(Math.max(50, lines + 10));
+    
+    // Cleanup observer on unmount
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
   }, []);
 
   // Handle text changes
@@ -82,8 +103,22 @@ const SkillsSection = () => {
     setLineCount(Math.max(50, lines + 10));
   };
 
-  // Handle key down for tab insertion
+  // Called after keydown to ensure cursor position is maintained
+  const handleKeyUp = (e) => {
+    // For certain keys, we may need to manually maintain cursor position
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      // Let the observer handle it via debounce
+    }
+  };
+
+  // Handle key down for special key processing
   const handleKeyDown = (e) => {
+    // Handle Enter key for line breaks
+    if (handleEnterKey(e, editorRef, handleTextChange)) {
+      return;
+    }
+    
+    // Handle Tab key for indentation
     if (e.key === 'Tab') {
       e.preventDefault();
       
@@ -116,12 +151,14 @@ const SkillsSection = () => {
       <div className="html-body" ref={containerRef}>
         <div 
           ref={editorRef}
-          className="code-editor-single"
+          className="code-editor-single language-html"
           contentEditable="true"
           onInput={handleTextChange}
           onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
           spellCheck="false"
           data-gramm="false"
+          data-language="html"
         />
       </div>
     </div>

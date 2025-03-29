@@ -560,6 +560,44 @@
   background-color: transparent;
   caret-color: var(--vscode-text-color);
   box-sizing: border-box;
+  position: relative;
+  cursor: text;
+}
+
+/* Fix line breaks inside contentEditable */
+.code-editor-single br {
+  display: block;
+  content: "";
+  margin-top: 0;
+}
+
+/* Improve text selection visibility */
+.code-editor-single::selection,
+.code-editor-single *::selection {
+  background-color: rgba(65, 105, 225, 0.3);
+}
+
+/* Override Prism's handling of newlines and spaces */
+.code-editor-single .token.cr,
+.code-editor-single .token.lf,
+.code-editor-single .token.space,
+.code-editor-single .token.tab,
+.code-editor-single .token.newline {
+  display: inline-block;
+}
+
+/* Force newlines to be respected in all browsers */
+.code-editor-single .token.punctuation + .token.newline,
+.code-editor-single .token.operator + .token.newline,
+.code-editor-single .token.keyword + .token.newline {
+  display: block;
+  height: 1.6em;
+}
+
+/* Make sure tokens don't break cursor positioning */
+.code-editor-single .token {
+  display: inline-block;
+  white-space: pre;
 }
 
 /* Apply specific colors based on content type */

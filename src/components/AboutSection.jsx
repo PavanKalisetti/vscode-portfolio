@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
+import '../utils/prism-vscode-theme.css';
+import { applySyntaxHighlighting, createSyntaxHighlightingObserver, handleEnterKey } from '../utils/SyntaxHighlighter';
 
 const AboutSection = () => {
   const [lineCount, setLineCount] = useState(40);
   const editorRef = useRef(null);
   const containerRef = useRef(null);
+  const observerRef = useRef(null);
 
   // Initial markdown content
   const initialMarkdown = `# About Me
@@ -48,11 +51,29 @@ University of Technology
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.textContent = initialMarkdown;
+      
+      // Initial syntax highlighting
+      applySyntaxHighlighting(editorRef.current, 'markdown');
+      
+      // Setup observer for real-time highlighting
+      observerRef.current = createSyntaxHighlightingObserver(editorRef.current, 'markdown');
+      observerRef.current.observe(editorRef.current, {
+        characterData: true,
+        childList: true,
+        subtree: true
+      });
     }
     
     // Count lines for line numbers
     const lines = initialMarkdown.split('\n').length;
     setLineCount(Math.max(40, lines + 10));
+    
+    // Cleanup observer on unmount
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
   }, []);
 
   // Handle text changes
@@ -64,8 +85,22 @@ University of Technology
     setLineCount(Math.max(40, lines + 10));
   };
 
-  // Handle key down for tab insertion
+  // Called after keydown to ensure cursor position is maintained
+  const handleKeyUp = (e) => {
+    // For certain keys, we may need to manually maintain cursor position
+    if (e.key === 'Backspace' || e.key === 'Delete') {
+      // Let the observer handle it via debounce
+    }
+  };
+
+  // Handle key down for special key processing
   const handleKeyDown = (e) => {
+    // Handle Enter key for line breaks
+    if (handleEnterKey(e, editorRef, handleTextChange)) {
+      return;
+    }
+    
+    // Handle Tab key for indentation
     if (e.key === 'Tab') {
       e.preventDefault();
       
@@ -98,12 +133,14 @@ University of Technology
       <div className="markdown-body code-editor" ref={containerRef}>
         <div 
           ref={editorRef}
-          className="code-editor-single"
+          className="code-editor-single language-markdown"
           contentEditable="true"
           onInput={handleTextChange}
           onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
           spellCheck="false"
           data-gramm="false"
+          data-language="markdown"
         />
       </div>
     </div>
