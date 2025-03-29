@@ -3,6 +3,13 @@
  * Designed to match VS Code's default dark theme
  */
 
+/* Apply PrismJS highlighting immediately */
+[class*="language-"].token,
+[class*="language-"] .token {
+  color: inherit;
+  background: none;
+}
+
 /* PrismJS base styles */
 code[class*="language-"],
 pre[class*="language-"],
@@ -18,7 +25,35 @@ pre[class*="language-"],
   word-wrap: normal;
   line-height: 1.6;
   tab-size: 2;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
   hyphens: none;
+}
+
+/* Define default colors for VS Code theme variables */
+:root {
+  --vscode-text-color: #d4d4d4;
+  --vscode-comment-color: #6a9955;
+  --vscode-punctuation-color: #d4d4d4;
+  --vscode-number-color: #b5cea8;
+  --vscode-string-color: #ce9178;
+  --vscode-operator-color: #d4d4d4;
+  --vscode-keyword-color: #569cd6;
+  --vscode-function-color: #dcdcaa;
+  --vscode-variable-color: #9cdcfe;
+  --vscode-heading-color: #569cd6;
+  --vscode-blockquote-color: #608b4e;
+  --vscode-code-color: #ce9178;
+  --vscode-hr-color: #6796e6;
+  --vscode-link-color: #3794ff;
+  --vscode-link-url-color: #9cdcfe;
+  --vscode-list-punctuation-color: #6796e6;
+  --vscode-table-header-color: #569cd6;
+  --vscode-json-property-color: #9cdcfe;
+  --vscode-html-tag-color: #569cd6;
+  --vscode-html-attribute-color: #9cdcfe;
+  --vscode-html-string-color: #ce9178;
 }
 
 /* Inline code */
@@ -38,6 +73,10 @@ pre[class*="language-"],
 
 .token.punctuation {
   color: var(--vscode-punctuation-color, #d4d4d4);
+}
+
+.token.namespace {
+  opacity: .7;
 }
 
 .token.property,
@@ -153,4 +192,28 @@ pre[class*="language-"],
 /* Ensure cursor color is visible on all highlighted elements */
 .code-editor-single {
   caret-color: var(--vscode-text-color, #d4d4d4);
+}
+
+/* Force proper display of tokens in contentEditable */
+.code-editor-single .token {
+  display: inline-block !important;
+  white-space: pre !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* Fix line breaks */
+.code-editor-single br:after {
+  content: "\A";
+  white-space: pre;
+}
+
+/* Ensure PrismJS is loaded immediately */
+.language-markdown:not(.prism-highlighted),
+.language-json:not(.prism-highlighted),
+.language-html:not(.prism-highlighted) {
+  color: var(--vscode-text-color, #d4d4d4) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 } 

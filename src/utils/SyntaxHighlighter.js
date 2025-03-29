@@ -6,6 +6,14 @@ import 'prismjs/components/prism-markup';
 // Initialize Prism to ensure it's ready to use
 Prism.manual = true;
 
+// Force Prism to load and be ready
+document.addEventListener('DOMContentLoaded', () => {
+  // Pre-load Prism languages to ensure they're available immediately
+  Prism.languages.markdown = Prism.languages.markdown || {};
+  Prism.languages.json = Prism.languages.json || {};
+  Prism.languages.markup = Prism.languages.markup || {};
+});
+
 /**
  * Get caret position within a contentEditable element
  * @param {Element} element The contentEditable element
@@ -122,40 +130,51 @@ function getLastTextNode(element) {
 export const applySyntaxHighlighting = (element, language) => {
   if (!element) return;
   
-  // Save current caret position
-  const caretPosition = getCaretPosition(element);
-  if (!caretPosition) return;
+  // Save current caret position if element is focused
+  let caretPosition = null;
+  if (document.activeElement === element) {
+    caretPosition = getCaretPosition(element);
+  }
   
   // Get the raw text
   const text = element.textContent || '';
+  if (!text.trim()) return; // Don't process empty content
+  
   let html = '';
   
   // Replace line breaks with a marker we can restore later
   const textWithLineBreaks = text.replace(/(\r\n|\n|\r)/g, '\n');
   
   // Apply appropriate syntax highlighting based on language
-  switch (language) {
-    case 'markdown':
-      html = Prism.highlight(textWithLineBreaks, Prism.languages.markdown, 'markdown');
-      break;
-    case 'json':
-      html = Prism.highlight(textWithLineBreaks, Prism.languages.json, 'json');
-      break;
-    case 'html':
-      html = Prism.highlight(textWithLineBreaks, Prism.languages.markup, 'html');
-      break;
-    default:
-      html = textWithLineBreaks; // No highlighting if language not supported
+  try {
+    switch (language) {
+      case 'markdown':
+        html = Prism.highlight(textWithLineBreaks, Prism.languages.markdown, 'markdown');
+        break;
+      case 'json':
+        html = Prism.highlight(textWithLineBreaks, Prism.languages.json, 'json');
+        break;
+      case 'html':
+        html = Prism.highlight(textWithLineBreaks, Prism.languages.markup, 'html');
+        break;
+      default:
+        html = textWithLineBreaks; // No highlighting if language not supported
+    }
+  } catch (e) {
+    console.error("Error during syntax highlighting:", e);
+    html = textWithLineBreaks; // Fallback to plain text on error
   }
   
   // Apply the highlighted HTML to the element
   element.innerHTML = html;
   
-  // Restore caret position
-  try {
-    setCaretPosition(element, caretPosition.start);
-  } catch (e) {
-    console.error("Could not restore cursor position:", e);
+  // Restore caret position if we had one saved
+  if (caretPosition) {
+    try {
+      setCaretPosition(element, caretPosition.start);
+    } catch (e) {
+      console.error("Could not restore cursor position:", e);
+    }
   }
 };
 
@@ -185,7 +204,7 @@ export const createSyntaxHighlightingObserver = (element, language) => {
   // Debounced version of applySyntaxHighlighting
   const debouncedHighlight = debounce((el, lang) => {
     applySyntaxHighlighting(el, lang);
-  }, 300); // 300ms debounce
+  }, 100); // 100ms debounce
   
   const observer = new MutationObserver((mutations) => {
     let shouldUpdate = false;
@@ -217,6 +236,46 @@ export const createSyntaxHighlightingObserver = (element, language) => {
   });
   
   return observer;
+};
+
+/**
+ * Initialize the editor with content and apply syntax highlighting
+ * This function ensures syntax highlighting is applied immediately after content is set
+ * 
+ * @param {HTMLElement} editorRef - Reference to the editor element
+ * @param {string} initialContent - The initial content to set
+ * @param {string} language - The language for syntax highlighting
+ * @param {Function} observerRef - Reference to store the created observer
+ * @param {Function} setLineCount - Function to update line count
+ * @returns {void}
+ */
+export const initializeEditor = (editorRef, initialContent, language, observerRef, setLineCount) => {
+  if (!editorRef || !editorRef.current) return;
+  
+  // Set the initial content
+  editorRef.current.textContent = initialContent;
+  
+  // Force a small delay to ensure the DOM is updated before applying highlighting
+  setTimeout(() => {
+    // Apply initial syntax highlighting
+    applySyntaxHighlighting(editorRef.current, language);
+    
+    // Setup observer for real-time highlighting
+    if (observerRef && typeof observerRef === 'object') {
+      observerRef.current = createSyntaxHighlightingObserver(editorRef.current, language);
+      observerRef.current.observe(editorRef.current, {
+        characterData: true,
+        childList: true,
+        subtree: true
+      });
+    }
+    
+    // Update line count if setLineCount function is provided
+    if (setLineCount && typeof setLineCount === 'function') {
+      const lines = initialContent.split('\n').length;
+      setLineCount(Math.max(lines + 10, 30));
+    }
+  }, 50);
 };
 
 // Add a helper function to handle Enter key press
@@ -254,5 +313,6 @@ export const handleEnterKey = (e, editorRef, textChangeHandler) => {
 export default {
   applySyntaxHighlighting,
   createSyntaxHighlightingObserver,
-  handleEnterKey
-}; 
+  handleEnterKey,
+  initializeEditor
+};

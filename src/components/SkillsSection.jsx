@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
 import '../utils/prism-vscode-theme.css';
-import { applySyntaxHighlighting, createSyntaxHighlightingObserver, handleEnterKey } from '../utils/SyntaxHighlighter';
+import { handleEnterKey, initializeEditor } from '../utils/SyntaxHighlighter';
 
 const SkillsSection = () => {
   const [lineCount, setLineCount] = useState(50);
@@ -67,24 +67,8 @@ const SkillsSection = () => {
 
   // Initialize editor with HTML
   useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.textContent = initialHtml;
-      
-      // Initial syntax highlighting
-      applySyntaxHighlighting(editorRef.current, 'html');
-      
-      // Setup observer for real-time highlighting
-      observerRef.current = createSyntaxHighlightingObserver(editorRef.current, 'html');
-      observerRef.current.observe(editorRef.current, {
-        characterData: true,
-        childList: true,
-        subtree: true
-      });
-    }
-    
-    // Count lines for line numbers
-    const lines = initialHtml.split('\n').length;
-    setLineCount(Math.max(50, lines + 10));
+    // Use the new initializeEditor function for better initial setup
+    initializeEditor(editorRef, initialHtml, 'html', observerRef, setLineCount);
     
     // Cleanup observer on unmount
     return () => {

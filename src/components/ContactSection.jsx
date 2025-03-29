@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
 import '../utils/prism-vscode-theme.css';
-import { applySyntaxHighlighting, createSyntaxHighlightingObserver, handleEnterKey } from '../utils/SyntaxHighlighter';
+import { handleEnterKey, initializeEditor } from '../utils/SyntaxHighlighter';
 
 const ContactSection = () => {
   const [lineCount, setLineCount] = useState(30);
@@ -42,24 +42,8 @@ I will get back to you as soon as possible!
 
   // Initialize editor with markdown
   useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.textContent = initialMarkdown;
-      
-      // Initial syntax highlighting
-      applySyntaxHighlighting(editorRef.current, 'markdown');
-      
-      // Setup observer for real-time highlighting
-      observerRef.current = createSyntaxHighlightingObserver(editorRef.current, 'markdown');
-      observerRef.current.observe(editorRef.current, {
-        characterData: true,
-        childList: true,
-        subtree: true
-      });
-    }
-    
-    // Count lines for line numbers
-    const lines = initialMarkdown.split('\n').length;
-    setLineCount(Math.max(30, lines + 10));
+    // Use the new initializeEditor function for better initial setup
+    initializeEditor(editorRef, initialMarkdown, 'markdown', observerRef, setLineCount);
     
     // Cleanup observer on unmount
     return () => {

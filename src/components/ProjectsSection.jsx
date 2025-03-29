@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './EditorContent.css';
 import '../utils/prism-vscode-theme.css';
-import { applySyntaxHighlighting, createSyntaxHighlightingObserver, handleEnterKey } from '../utils/SyntaxHighlighter';
+import { applySyntaxHighlighting, handleEnterKey, initializeEditor } from '../utils/SyntaxHighlighter';
 
 const ProjectsSection = () => {
   const [error, setError] = useState(null);
@@ -42,24 +42,8 @@ const ProjectsSection = () => {
   useEffect(() => {
     const formattedJson = JSON.stringify({ projects: initialProjects }, null, 2);
     
-    if (editorRef.current) {
-      editorRef.current.textContent = formattedJson;
-      
-      // Initial syntax highlighting
-      applySyntaxHighlighting(editorRef.current, 'json');
-      
-      // Setup observer for real-time highlighting
-      observerRef.current = createSyntaxHighlightingObserver(editorRef.current, 'json');
-      observerRef.current.observe(editorRef.current, {
-        characterData: true,
-        childList: true,
-        subtree: true
-      });
-    }
-    
-    // Count lines for the line numbers
-    const lines = formattedJson.split('\n').length;
-    setLineCount(Math.max(50, lines + 10));
+    // Use the new initializeEditor function for better initial setup
+    initializeEditor(editorRef, formattedJson, 'json', observerRef, setLineCount);
     
     // Cleanup observer on unmount
     return () => {
