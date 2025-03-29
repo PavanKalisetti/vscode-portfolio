@@ -16,15 +16,15 @@ Feel free to contact me if you have any questions, job opportunities, or just wa
 
 ## Contact Information
 
-- **Email**: john@example.com
-- **Phone**: +1 (555) 123-4567
-- **Location**: San Francisco, CA
+- **Email**: itspavan09@gmail.com
+- **Phone**: +91 9989122023
+- **Location**: Andhra Pradesh, India
 
 ## Social Media
 
-- [GitHub](https://github.com/johndoe)
-- [LinkedIn](https://linkedin.com/in/johndoe)
-- [Twitter](https://twitter.com/johndoe)
+- [GitHub](https://github.com/PavanKalisetti)
+- [LinkedIn](https://www.linkedin.com/in/pavan-kalisetti-207b411b9/)
+- [Twitter](https://x.com/ungrad_engineer)
 
 ## Contact Form
 

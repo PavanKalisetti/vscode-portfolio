@@ -1,26 +1,42 @@
-import React from 'react';
-import Explorer from './Explorer';
+import React, { useState } from 'react';
+import FileExplorer from './FileExplorer';
+import Search from './Search';
+import GitPanel from './GitPanel';
+import DebugPanel from './DebugPanel';
+import Extensions from './Extensions';
 import './Sidebar.css';
 
-const Sidebar = ({ activeIcon, activeFile, setActiveFile }) => {
+const Sidebar = ({ activeIcon, activeFile, setActiveFile, commands, onCommandSelect }) => {
+  const folders = [
+    {
+      name: 'portfolio',
+      files: [
+        { name: 'README.md', content: 'About me content' },
+        { name: 'projects.json', content: 'Projects data' },
+        { name: 'skills.html', content: 'Skills listing' },
+        { name: 'contact.md', content: 'Contact information' }
+      ]
+    }
+  ];
+
   const renderContent = () => {
     switch (activeIcon) {
       case 'explorer':
-        return <Explorer activeFile={activeFile} setActiveFile={setActiveFile} />;
+        return <FileExplorer folders={folders} activeFile={activeFile} onFileSelect={setActiveFile} />;
       case 'search':
-        return <div className="sidebar-section">Search</div>;
+        return <Search commands={commands} onCommandSelect={onCommandSelect} />;
       case 'git':
-        return <div className="sidebar-section">Source Control</div>;
+        return <GitPanel />;
       case 'debug':
-        return <div className="sidebar-section">Run and Debug</div>;
+        return <DebugPanel />;
       case 'extensions':
-        return <div className="sidebar-section">Extensions</div>;
+        return <Extensions />;
       case 'account':
         return <div className="sidebar-section">Account</div>;
       case 'settings':
         return <div className="sidebar-section">Settings</div>;
       default:
-        return <Explorer activeFile={activeFile} setActiveFile={setActiveFile} />;
+        return <FileExplorer folders={folders} activeFile={activeFile} onFileSelect={setActiveFile} />;
     }
   };
 

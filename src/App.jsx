@@ -52,16 +52,16 @@ function App() {
         
       // Social media and contact links  
       case 'OPEN_LINKEDIN':
-        window.open('https://www.linkedin.com/', '_blank')
+        window.open('https://www.linkedin.com/in/pavan-kalisetti-207b411b9/', '_blank')
         break
       case 'OPEN_GITHUB':
-        window.open('https://github.com/', '_blank')
+        window.open('https://github.com/PavanKalisetti', '_blank')
         break
       case 'OPEN_TWITTER':
-        window.open('https://twitter.com/', '_blank')
+        window.open('https://x.com/ungrad_engineer', '_blank')
         break
       case 'OPEN_EMAIL':
-        window.location.href = 'mailto:your.email@example.com'
+        window.location.href = 'mailto:itspavan09@gmail.com'
         break
         
       // Help section actions  
@@ -72,7 +72,7 @@ function App() {
         window.open('https://github.com/yourusername/portfolio-vscode', '_blank')
         break
       case 'REPORT_ISSUE':
-        window.location.href = 'mailto:your.email@example.com?subject=Issue%20with%20your%20portfolio%20site'
+        window.location.href = 'mailto:itspavan09@gmail.com?subject=Issue%20with%20your%20portfolio%20site'
         break
         
       // Window control actions
@@ -114,20 +114,63 @@ function App() {
       setTheme('light')
       document.documentElement.setAttribute('data-theme', 'light')
     }},
-    { id: 'linkedin', label: 'Open LinkedIn Profile', action: () => window.open('https://www.linkedin.com/', '_blank') },
-    { id: 'github', label: 'Open GitHub Profile', action: () => window.open('https://github.com/', '_blank') },
-    { id: 'twitter', label: 'Open Twitter Profile', action: () => window.open('https://twitter.com/', '_blank') },
-    { id: 'email', label: 'Send Email', action: () => window.location.href = 'mailto:your.email@example.com' },
+    { id: 'view-explorer', label: 'Show Explorer', action: () => setActiveIcon('explorer') },
+    { id: 'view-search', label: 'Show Search', action: () => setActiveIcon('search') },
+    { id: 'view-github', label: 'Show GitHub', action: () => setActiveIcon('git') },
+    { id: 'linkedin', label: 'Open LinkedIn Profile', action: () => window.open('https://www.linkedin.com/in/pavan-kalisetti-207b411b9/', '_blank') },
+    { id: 'github', label: 'Open GitHub Profile', action: () => window.open('https://github.com/PavanKalisetti', '_blank') },
+    { id: 'twitter', label: 'Open Twitter Profile', action: () => window.open('https://x.com/ungrad_engineer', '_blank') },
+    { id: 'email', label: 'Send Email', action: () => window.location.href = 'mailto:itspavan09@gmail.com' },
     { id: 'about-site', label: 'About This Site', action: () => setShowAboutModal(true) },
     { id: 'source-code', label: 'View Source Code', action: () => window.open('https://github.com/yourusername/portfolio-vscode', '_blank') },
   ]
+
+  // Handler for executing a command from the command palette
+  const handleCommandPaletteSelect = (command) => {
+    if (command && command.action) {
+      command.action();
+      setShowCommandPalette(false);
+    }
+  };
+
+  // Handler for executing a command from the sidebar search
+  const handleSidebarCommandSelect = (command) => {
+    if (command && command.id) {
+      // Map commands to their actions
+      switch (command.id) {
+        case 'about':
+          setActiveFile('README.md');
+          break;
+        case 'projects':
+          setActiveFile('projects.json');
+          break;
+        case 'skills':
+          setActiveFile('skills.html');
+          break;
+        case 'contact':
+          setActiveFile('contact.md');
+          break;
+        default:
+          // If it has an action function, execute it
+          if (command.action && typeof command.action === 'function') {
+            command.action();
+          }
+      }
+    }
+  };
 
   return (
     <div className={`vs-container theme-${theme}`}>
       <TitleBar onMenuAction={handleMenuAction} />
       <div className="vs-main">
         <ActivityBar activeIcon={activeIcon} setActiveIcon={setActiveIcon} />
-        <Sidebar activeIcon={activeIcon} activeFile={activeFile} setActiveFile={setActiveFile} />
+        <Sidebar 
+          activeIcon={activeIcon} 
+          activeFile={activeFile} 
+          setActiveFile={setActiveFile} 
+          commands={commands}
+          onCommandSelect={handleSidebarCommandSelect}
+        />
         <Editor activeFile={activeFile} setActiveFile={setActiveFile} />
       </div>
       <StatusBar theme={theme} />
@@ -140,10 +183,7 @@ function App() {
         <CommandPalette 
           commands={commands} 
           onClose={() => setShowCommandPalette(false)}
-          onSelect={(command) => {
-            command.action()
-            setShowCommandPalette(false)
-          }}
+          onSelect={handleCommandPaletteSelect}
         />
       )}
     </div>

@@ -42,10 +42,10 @@ University of Technology
 
 ## Contact
 
-- Email: john@example.com
-- GitHub: github.com/johndoe
-- LinkedIn: linkedin.com/in/johndoe
-- Twitter: @johndoe`;
+- Email: itspavan09@gmail.com
+- GitHub: github.com/PavanKalisetti
+- LinkedIn: https://www.linkedin.com/in/pavan-kalisetti-207b411b9/
+- Twitter: @ungrad_engineer`;
 
   // Initialize editor with markdown
   useEffect(() => {

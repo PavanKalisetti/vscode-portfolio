@@ -25,7 +25,7 @@ const TitleBar = ({ onMenuAction }) => {
       { label: 'Projects', action: 'OPEN_FILE', payload: 'projects.json' },
       { label: 'Skills', action: 'OPEN_FILE', payload: 'skills.html' },
       { label: 'Contact', action: 'OPEN_FILE', payload: 'contact.md' },
-      { label: 'Download Resume', action: 'DOWNLOAD_RESUME' },
+      // { label: 'Download Resume', action: 'DOWNLOAD_RESUME' },
     ],
     View: [
       { label: 'Command Palette...', action: 'COMMAND_PALETTE' },
@@ -144,7 +144,7 @@ const TitleBar = ({ onMenuAction }) => {
           </div>
         ))}
       </div>
-      <div className="titlebar-title">Developer Portfolio — VS Code Edition</div>
+      <div className="titlebar-title">VS Code Edition</div>
       <div className="titlebar-controls">
         <button 
           className="titlebar-button minimize" 

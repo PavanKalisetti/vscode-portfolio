@@ -23,4 +23,78 @@
   color: var(--vscode-text-color);
   height: 100%;
   overflow-y: auto;
+}
+
+/* Content placeholders */
+.content-placeholder {
+  padding: 10px;
+  color: var(--vscode-text-inactive);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.small-text {
+  font-size: 12px;
+  margin-top: 8px;
+  opacity: 0.8;
+}
+
+/* Git panel styles */
+.git-links {
+  margin-top: 12px;
+}
+
+.git-link {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: var(--vscode-dropdown-background);
+  border-radius: 3px;
+  color: var(--vscode-text-color);
+  text-decoration: none;
+  font-size: 13px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.git-link:hover {
+  background-color: var(--vscode-sidebar-active);
+}
+
+/* Extensions panel styles */
+.extensions-list {
+  padding: 8px 0;
+}
+
+.extension-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.extension-item:hover {
+  background-color: var(--vscode-sidebar-active);
+}
+
+.extension-icon {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.extension-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.extension-name {
+  font-size: 13px;
+  color: var(--vscode-text-color);
+}
+
+.extension-publisher {
+  font-size: 11px;
+  color: var(--vscode-text-inactive);
+  margin-top: 2px;
 } 

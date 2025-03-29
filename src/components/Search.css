@@ -1,0 +1,124 @@
+.search-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.search-type-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--vscode-border);
+}
+
+.search-tab {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--vscode-text-inactive);
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.search-tab.active {
+  opacity: 1;
+  border-bottom: 2px solid var(--vscode-statusbar-bg);
+  color: var(--vscode-text-color);
+}
+
+.search-tab:hover {
+  opacity: 1;
+}
+
+.search-input-container {
+  padding: 8px;
+  border-bottom: 1px solid var(--vscode-border);
+}
+
+.search-input {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 13px;
+  background-color: var(--vscode-dropdown-background);
+  color: var(--vscode-text-color);
+  border: 1px solid var(--vscode-border);
+  border-radius: 2px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--vscode-statusbar-bg);
+}
+
+.search-results, .command-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.search-placeholder, .no-commands {
+  padding: 8px 16px;
+  color: var(--vscode-text-inactive);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* File Item Styles */
+.file-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.file-item:hover, .file-item.selected {
+  background-color: var(--vscode-list-hoverBackground);
+}
+
+.file-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.file-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.file-name {
+  color: var(--vscode-text-color);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-description {
+  color: var(--vscode-text-inactive);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Command Item Styles */
+.command-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.command-item:hover, .command-item.selected {
+  background-color: var(--vscode-list-hoverBackground);
+}
+
+.command-label {
+  color: var(--vscode-text-color);
+} 
