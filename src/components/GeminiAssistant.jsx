@@ -15,35 +15,62 @@ const GeminiAssistant = ({ apiKey }) => {
   );
   const [showSystemPrompt, setShowSystemPrompt] = useState(false);
   const [textInput, setTextInput] = useState('');
+  const [debugInfo, setDebugInfo] = useState({});
   
   const recognitionRef = useRef(null);
   const synthRef = useRef(window.speechSynthesis);
   const genAIRef = useRef(null);
   const modelRef = useRef(null);
   
+  // Log environment info on mount
+  useEffect(() => {
+    const browserInfo = {
+      userAgent: navigator.userAgent,
+      isSecureContext: window.isSecureContext,
+      hasWebSpeechAPI: 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window,
+      hasSpeechSynthesis: 'speechSynthesis' in window,
+      url: window.location.href,
+      protocol: window.location.protocol,
+      hostname: window.location.hostname
+    };
+    
+    console.log('Environment information:', browserInfo);
+    setDebugInfo(browserInfo);
+  }, []);
+  
   // Initialize Gemini AI
   useEffect(() => {
     if (apiKey) {
       try {
+        console.log('Initializing Gemini AI with API key');
         genAIRef.current = new GoogleGenerativeAI(apiKey);
         updateModel();
       } catch (err) {
         console.error('Error initializing Gemini AI:', err);
         setError('Error initializing Gemini AI. Please check your API key.');
       }
+    } else {
+      console.error('No API key provided for Gemini AI');
     }
   }, [apiKey]);
   
   // Update model with system prompt
   const updateModel = () => {
     try {
-      if (!genAIRef.current) return;
+      if (!genAIRef.current) {
+        console.error('Gemini AI reference is not initialized');
+        return;
+      }
+      
+      console.log('Configuring Gemini model with system prompt:', systemPrompt.substring(0, 50) + '...');
       
       // Configure model with system prompt
       modelRef.current = genAIRef.current.getGenerativeModel({ 
         model: "gemini-1.5-pro",
         systemInstruction: systemPrompt
       });
+      
+      console.log('Gemini model configured successfully');
     } catch (err) {
       console.error('Error configuring model:', err);
       setError('Error configuring AI model. Please try again.');
@@ -57,42 +84,115 @@ const GeminiAssistant = ({ apiKey }) => {
   
   // Initialize speech recognition
   useEffect(() => {
-    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    // Detailed logging about speech recognition availability
+    if ('SpeechRecognition' in window) {
+      console.log('Native SpeechRecognition API is available');
+    } else if ('webkitSpeechRecognition' in window) {
+      console.log('Webkit SpeechRecognition API is available');
+    } else {
+      console.error('SpeechRecognition API is not available in this browser');
+      setError('Speech recognition is not supported in this browser. Please use text input instead.');
+      return;
+    }
+    
+    try {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      console.log('Creating SpeechRecognition instance');
+      
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
       
+      console.log('SpeechRecognition instance created successfully');
+      
       recognitionRef.current.onresult = (event) => {
         const text = event.results[0][0].transcript;
-        console.log('Speech to text conversion:', text); // Console log the speech to text conversion
+        console.log('Speech recognition successful, transcript:', text);
+        console.log('Speech confidence level:', event.results[0][0].confidence);
         setTranscript(text);
         setIsListening(false);
         processWithGemini(text);
       };
       
       recognitionRef.current.onerror = (event) => {
-        console.error('Speech recognition error', event.error);
+        console.error('Speech recognition error:', {
+          error: event.error,
+          message: event.message,
+          timeStamp: event.timeStamp,
+          type: 'error',
+          isTrusted: event.isTrusted,
+          secureContext: window.isSecureContext,
+          fullEvent: JSON.stringify(event)
+        });
+        
         if (event.error === 'network') {
+          console.error('Network error details:', {
+            online: navigator.onLine,
+            protocol: window.location.protocol,
+            hostname: window.location.hostname
+          });
           setError('Network error with speech recognition. This feature may not work in all environments. Please try using text input instead.');
+        } else if (event.error === 'not-allowed') {
+          console.error('Microphone access denied');
+          setError('Microphone access denied. Please check your browser permissions and try again.');
+        } else if (event.error === 'no-speech') {
+          console.log('No speech detected');
+          setError('No speech detected. Please try again or use text input.');
         } else {
           setError(`Speech recognition error: ${event.error}. Please try again or use text input.`);
         }
         setIsListening(false);
       };
       
+      recognitionRef.current.onstart = () => {
+        console.log('Speech recognition started');
+      };
+      
       recognitionRef.current.onend = () => {
+        console.log('Speech recognition ended');
         setIsListening(false);
       };
-    } else {
-      setError('Speech recognition is not supported in this browser. Please use text input instead.');
+      
+      recognitionRef.current.onsoundstart = () => {
+        console.log('Speech recognition detected sound');
+      };
+      
+      recognitionRef.current.onsoundend = () => {
+        console.log('Speech recognition sound ended');
+      };
+      
+      recognitionRef.current.onspeechstart = () => {
+        console.log('Speech recognition detected speech');
+      };
+      
+      recognitionRef.current.onspeechend = () => {
+        console.log('Speech recognition speech ended');
+      };
+      
+      recognitionRef.current.onaudiostart = () => {
+        console.log('Speech recognition audio started');
+      };
+      
+      recognitionRef.current.onaudioend = () => {
+        console.log('Speech recognition audio ended');
+      };
+      
+      recognitionRef.current.onnomatch = () => {
+        console.log('Speech recognition no match found');
+      };
+      
+    } catch (err) {
+      console.error('Error initializing speech recognition:', err);
+      setError('Error initializing speech recognition. Please use text input instead.');
     }
     
     return () => {
       if (recognitionRef.current) {
+        console.log('Cleaning up speech recognition');
         recognitionRef.current.abort();
       }
       if (synthRef.current && synthRef.current.speaking) {
+        console.log('Canceling speech synthesis');
         synthRef.current.cancel();
       }
     };
@@ -101,14 +201,19 @@ const GeminiAssistant = ({ apiKey }) => {
   // Function to process text with Gemini API
   const processWithGemini = async (text) => {
     try {
+      console.log('Processing text with Gemini:', text);
       setIsProcessing(true);
       
       if (!modelRef.current) {
+        console.error('Gemini API model is not initialized');
         throw new Error('Gemini API model is not initialized');
       }
       
+      console.log('Sending request to Gemini API');
       // Generate content
       const result = await modelRef.current.generateContent(text);
+      console.log('Received response from Gemini API');
+      
       const response = result.response;
       const aiResponse = response.text();
       
@@ -131,40 +236,64 @@ const GeminiAssistant = ({ apiKey }) => {
   // Function to convert text to speech
   const speakResponse = (text) => {
     if (synthRef.current) {
-      if (synthRef.current.speaking) {
-        synthRef.current.cancel();
+      try {
+        if (synthRef.current.speaking) {
+          console.log('Canceling previous speech synthesis');
+          synthRef.current.cancel();
+        }
+        
+        console.log('Starting speech synthesis');
+        setIsSpeaking(true);
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        utterance.onstart = () => {
+          console.log('Speech synthesis started');
+        };
+        
+        utterance.onend = () => {
+          console.log('Speech synthesis ended');
+          setIsSpeaking(false);
+        };
+        
+        utterance.onerror = (err) => {
+          console.error('Speech synthesis error:', err);
+          setIsSpeaking(false);
+        };
+        
+        synthRef.current.speak(utterance);
+      } catch (err) {
+        console.error('Error in speech synthesis:', err);
+        setIsSpeaking(false);
       }
-      
-      setIsSpeaking(true);
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.onend = () => {
-        setIsSpeaking(false);
-      };
-      utterance.onerror = (err) => {
-        console.error('Speech synthesis error', err);
-        setIsSpeaking(false);
-      };
-      
-      synthRef.current.speak(utterance);
+    } else {
+      console.error('Speech synthesis not available');
     }
   };
   
   // Toggle listening state
   const toggleListening = () => {
     if (isListening) {
+      console.log('Stopping speech recognition');
       recognitionRef.current.stop();
       setIsListening(false);
     } else {
+      console.log('Starting speech recognition');
       setError('');
       setTranscript('');
-      recognitionRef.current.start();
-      setIsListening(true);
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (err) {
+        console.error('Error starting speech recognition:', err);
+        setError(`Error starting speech recognition: ${err.message}`);
+      }
     }
   };
   
   // Stop speaking
   const stopSpeaking = () => {
     if (synthRef.current && synthRef.current.speaking) {
+      console.log('Stopping speech synthesis');
       synthRef.current.cancel();
       setIsSpeaking(false);
     }
@@ -189,6 +318,7 @@ const GeminiAssistant = ({ apiKey }) => {
   const handleTextInputSubmit = (e) => {
     e.preventDefault();
     if (textInput.trim()) {
+      console.log('Submitting text input:', textInput);
       setTranscript(textInput);
       processWithGemini(textInput);
       setTextInput('');
@@ -257,6 +387,14 @@ const GeminiAssistant = ({ apiKey }) => {
           <div className="processing-indicator">
             <div className="spinner"></div>
             <span>Processing your request...</span>
+          </div>
+        )}
+        
+        {/* Add debug info section in development mode */}
+        {import.meta.env.DEV && (
+          <div className="debug-info">
+            <h3>Debug Information</h3>
+            <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
           </div>
         )}
       </div>

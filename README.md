@@ -109,6 +109,16 @@ When deploying to platforms like Vercel, speech recognition might encounter netw
 
 The text input option is provided as a reliable alternative in environments where speech recognition isn't available.
 
+### Debugging Speech Recognition
+To help diagnose speech recognition issues, the application includes detailed logging:
+
+1. **Console Logs**: Comprehensive logging has been added to trace the entire speech recognition lifecycle
+2. **Error Details**: Network errors, permission issues, and other speech recognition problems are logged with detailed diagnostics
+3. **Environment Information**: Browser capabilities, security context, and network conditions are captured
+4. **Debug Panel**: In development mode, a debug panel shows key environment information to assist in troubleshooting
+
+When deploying to Vercel or other hosting platforms, check the browser console logs for detailed information about why speech recognition might not be working.
+
 ## Customization
 
 This portfolio is designed to be easily customizable. Update the content in:
