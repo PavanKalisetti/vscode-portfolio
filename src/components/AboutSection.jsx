@@ -40,6 +40,14 @@ Developed responsive websites and implemented complex UI components for various 
 *2014 - 2018*
 University of Technology
 
+## Features
+
+This portfolio website includes a **Gemini AI Voice Assistant**. To use it:
+1. Click on the AI icon in the Activity Bar (6th icon from the top)
+2. Click "Start Listening" to speak to the AI
+3. Ask any questions and get voice responses from Gemini AI
+4. Click "Show System Prompt" to customize the AI's behavior with different instructions
+
 ## Contact
 
 - Email: itspavan09@gmail.com

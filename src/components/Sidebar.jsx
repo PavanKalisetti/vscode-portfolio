@@ -4,6 +4,7 @@ import Search from './Search';
 import GitPanel from './GitPanel';
 import DebugPanel from './DebugPanel';
 import Extensions from './Extensions';
+import GeminiAssistant from './GeminiAssistant';
 import './Sidebar.css';
 
 const Sidebar = ({ activeIcon, activeFile, setActiveFile, commands, onCommandSelect }) => {
@@ -31,6 +32,8 @@ const Sidebar = ({ activeIcon, activeFile, setActiveFile, commands, onCommandSel
         return <DebugPanel />;
       case 'extensions':
         return <Extensions />;
+      case 'gemini':
+        return <GeminiAssistant apiKey={import.meta.env.VITE_GEMINI_API_KEY} />;
       case 'account':
         return <div className="sidebar-section">Account</div>;
       case 'settings':
@@ -52,6 +55,8 @@ const Sidebar = ({ activeIcon, activeFile, setActiveFile, commands, onCommandSel
         return 'RUN AND DEBUG';
       case 'extensions':
         return 'EXTENSIONS';
+      case 'gemini':
+        return 'GEMINI AI ASSISTANT';
       case 'account':
         return 'ACCOUNT';
       case 'settings':
