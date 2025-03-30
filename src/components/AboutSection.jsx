@@ -44,8 +44,8 @@ University of Technology
 
 This portfolio website includes a **Gemini AI Voice Assistant**. To use it:
 1. Click on the AI icon in the Activity Bar (6th icon from the top)
-2. Click "Start Listening" to speak to the AI
-3. Ask any questions and get voice responses from Gemini AI
+2. You can speak to the AI by clicking "Start Listening" or type your questions in the text box
+3. The AI will respond with both text and voice
 4. Click "Show System Prompt" to customize the AI's behavior with different instructions
 
 ## Contact

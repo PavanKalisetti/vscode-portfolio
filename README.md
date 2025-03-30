@@ -59,9 +59,12 @@ npm run dev
 ## Using the Gemini AI Assistant
 
 1. Click on the AI Assistant icon in the Activity Bar (the 6th icon from the top)
-2. Click the "Start Listening" button to begin speaking
-3. Ask any question, and the AI will respond with text and voice
-4. Click "Stop Speaking" to interrupt the AI's voice response
+2. **Voice Input**: Click the "Start Listening" button to speak to the AI
+3. **Text Input**: Alternatively, type your question in the text box and click "Send"
+4. The AI will respond with both text and voice
+5. Click "Stop Speaking" to interrupt the AI's voice response
+
+**Note**: Speech recognition may not work in all environments (especially in some deployed environments). The text input option is provided as a reliable alternative.
 
 You can also customize the AI's behavior:
 1. Click "Show System Prompt" to reveal the system instructions
@@ -90,10 +93,21 @@ npm install @google/generative-ai
 
 Key features of the implementation:
 - System prompts to customize AI behavior
-- Speech-to-text using the Web Speech API
+- Speech-to-text using the Web Speech API (with fallback to text input)
 - Text-to-speech for AI responses
 - Conversation history tracking
+- Error handling for different browser environments
 - Console logging of both speech input and AI responses
+
+## Common Deployment Issues
+
+### Speech Recognition Issues
+When deploying to platforms like Vercel, speech recognition might encounter network errors due to:
+- Security restrictions for microphone access in production environments
+- Cross-origin policies in browsers
+- HTTPS requirements for Web Speech API
+
+The text input option is provided as a reliable alternative in environments where speech recognition isn't available.
 
 ## Customization
 

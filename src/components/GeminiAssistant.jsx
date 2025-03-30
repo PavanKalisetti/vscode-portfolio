@@ -14,6 +14,7 @@ const GeminiAssistant = ({ apiKey }) => {
     "You are a helpful, your name is pavan, professional assistant for a portfolio website. Provide concise, accurate information about web development, programming, and career topics. Be friendly and conversational in tone. If you don't know something, admit it rather than making up information."
   );
   const [showSystemPrompt, setShowSystemPrompt] = useState(false);
+  const [textInput, setTextInput] = useState('');
   
   const recognitionRef = useRef(null);
   const synthRef = useRef(window.speechSynthesis);
@@ -72,7 +73,11 @@ const GeminiAssistant = ({ apiKey }) => {
       
       recognitionRef.current.onerror = (event) => {
         console.error('Speech recognition error', event.error);
-        setError(`Speech recognition error: ${event.error}`);
+        if (event.error === 'network') {
+          setError('Network error with speech recognition. This feature may not work in all environments. Please try using text input instead.');
+        } else {
+          setError(`Speech recognition error: ${event.error}. Please try again or use text input.`);
+        }
         setIsListening(false);
       };
       
@@ -80,7 +85,7 @@ const GeminiAssistant = ({ apiKey }) => {
         setIsListening(false);
       };
     } else {
-      setError('Speech recognition is not supported in this browser.');
+      setError('Speech recognition is not supported in this browser. Please use text input instead.');
     }
     
     return () => {
@@ -175,6 +180,21 @@ const GeminiAssistant = ({ apiKey }) => {
     setShowSystemPrompt(!showSystemPrompt);
   };
 
+  // Add a handler for text input change
+  const handleTextInputChange = (e) => {
+    setTextInput(e.target.value);
+  };
+
+  // Add a handler for text input submit
+  const handleTextInputSubmit = (e) => {
+    e.preventDefault();
+    if (textInput.trim()) {
+      setTranscript(textInput);
+      processWithGemini(textInput);
+      setTextInput('');
+    }
+  };
+
   return (
     <div className="gemini-assistant">
       <div className="gemini-header">
@@ -241,22 +261,42 @@ const GeminiAssistant = ({ apiKey }) => {
         )}
       </div>
       
-      <div className="control-panel">
-        <button 
-          className={`mic-button ${isListening ? 'listening' : ''}`} 
-          onClick={toggleListening}
-          disabled={isProcessing}
-        >
-          {isListening ? 'Stop Listening' : 'Start Listening'}
-          <span className="mic-icon">{isListening ? '🔴' : '🎤'}</span>
-        </button>
-        
-        {isSpeaking && (
-          <button className="stop-button" onClick={stopSpeaking}>
-            Stop Speaking
-            <span className="stop-icon">🔇</span>
+      <div className="input-control-panel">
+        <form onSubmit={handleTextInputSubmit} className="text-input-form">
+          <input
+            type="text"
+            value={textInput}
+            onChange={handleTextInputChange}
+            placeholder="Type your message here..."
+            className="text-input"
+            disabled={isProcessing}
+          />
+          <button 
+            type="submit" 
+            className="send-button"
+            disabled={isProcessing || !textInput.trim()}
+          >
+            Send
           </button>
-        )}
+        </form>
+        
+        <div className="control-panel">
+          <button 
+            className={`mic-button ${isListening ? 'listening' : ''}`} 
+            onClick={toggleListening}
+            disabled={isProcessing}
+          >
+            {isListening ? 'Stop Listening' : 'Start Listening'}
+            <span className="mic-icon">{isListening ? '🔴' : '🎤'}</span>
+          </button>
+          
+          {isSpeaking && (
+            <button className="stop-button" onClick={stopSpeaking}>
+              Stop Speaking
+              <span className="stop-icon">🔇</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
